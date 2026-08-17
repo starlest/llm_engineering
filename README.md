@@ -1,3 +1,5 @@
+> **Note:** This is my personal fork of the [LLM Engineering](https://github.com/ed-donner/llm_engineering) course repository, containing my solutions and notes as I work through the exercises created by [Ed Donner](https://edwarddonner.com/). All credit for the course content, structure, and materials below goes to Ed — this repo just tracks my own progress through it.
+
 # LLM Engineering - Master AI and LLMs
 
 ## Your 8 week journey to proficiency starts today
