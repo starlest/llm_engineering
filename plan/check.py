@@ -19,7 +19,7 @@ import subprocess
 import sys
 import tempfile
 
-VERSION = "3"
+VERSION = "4"
 
 
 def main():
@@ -132,9 +132,24 @@ def has_packages(py):
         return False
 
 
+def clean_env(home):
+    """The environment the tests run in: a placeholder API key, a temporary home folder, and only what the
+    operating system needs to start Python. Nothing else from your shell reaches the tests, so no real key does."""
+    env = {"HOME": home, "OPENAI_API_KEY": "not-a-real-key"}
+    if os.name == "nt":  # Windows needs these to start Python and to make temporary files
+        for key in ("SYSTEMROOT", "SYSTEMDRIVE", "WINDIR", "COMSPEC", "PATHEXT", "PATH", "TEMP", "TMP"):
+            if os.environ.get(key):
+                env[key] = os.environ[key]
+        env["USERPROFILE"] = home
+    else:
+        env["PATH"] = "/usr/bin:/bin"
+    return env
+
+
 def run_tests(py, work, fork, learner_rel, tests_name, isolate, ready):
     """Run one exercise's tests in a separate process: a clean environment, a placeholder key and a time limit,
-    with no network where the system allows that."""
+    with no network where the system allows that. Python itself enforces the limit, so this works on Windows,
+    macOS and Linux alike."""
     out = os.path.join(work, tests_name + ".json")
     if os.path.exists(out):
         os.remove(out)
@@ -143,21 +158,23 @@ def run_tests(py, work, fork, learner_rel, tests_name, isolate, ready):
     if os.path.isfile(os.path.join(fork, learner_rel)) and not ready:
         return [{"what": "The tests ran", "ok": False,
                  "why": "this Python has no pydantic, openai or dotenv; run the check with the course environment: uv run python plan/check.py"}]
-    cmd = ["timeout", "120"] + (["unshare", "-rn"] if isolate else []) + [
-        "env", "-i", "PATH=/usr/bin:/bin", "HOME=" + home, "OPENAI_API_KEY=not-a-real-key",
+    cmd = (["unshare", "-rn"] if isolate else []) + [
         py, "-I", os.path.join(HERE, "harness.py"), os.path.join(fork, learner_rel), os.path.join(HERE, tests_name), out]
     try:
-        done = subprocess.run(cmd, cwd=fork, capture_output=True, timeout=150)
-        if done.returncode == 124:  # the timeout command stopped it
-            raise subprocess.TimeoutExpired(cmd, 120)
-        with open(out) as fh:
+        done = subprocess.run(cmd, cwd=fork, env=clean_env(home), capture_output=True, timeout=120)
+    except subprocess.TimeoutExpired:
+        return [{"what": "The tests ran", "ok": False, "why": f"the tests on {learner_rel} did not finish within 2 minutes"}]
+    except OSError as e:
+        return [{"what": "The tests ran", "ok": False, "why": f"the tests on {learner_rel} could not be started: {e}"}]
+    try:
+        with open(out, encoding="utf-8") as fh:
             results = json.load(fh)
         assert isinstance(results, list) and results
         return results
-    except subprocess.TimeoutExpired:
-        return [{"what": "The tests ran", "ok": False, "why": f"the tests on {learner_rel} did not finish within 2 minutes"}]
-    except Exception:  # noqa: BLE001
-        return [{"what": "The tests ran", "ok": False, "why": f"the tests on {learner_rel} could not be run; try the check again"}]
+    except Exception:  # noqa: BLE001 - say what the test process said, so the cause can be found
+        said = [line.strip() for line in done.stderr.decode("utf-8", "replace").splitlines() if line.strip()]
+        detail = said[-1][:160] if said else f"it stopped with exit code {done.returncode}"
+        return [{"what": "The tests ran", "ok": False, "why": f"the tests on {learner_rel} could not be run: {detail}"}]
 
 
 def root_cause(why):
@@ -312,6 +329,11 @@ def report(status, everything=False):
 
 
 def main(root, work, py, argv):
+    for stream in (sys.stdout, sys.stderr):  # a Windows console may not print every character; never crash on one
+        try:
+            stream.reconfigure(errors="replace")
+        except Exception:  # noqa: BLE001 - an unusual stream; printing still works in most cases
+            pass
     status = check(root, work, py)
     print(report(status, everything="--all" in argv))
     if "--no-write" in argv:
@@ -693,20 +715,38 @@ Usage: python -I harness.py LEARNER_FILE.py TESTS.py OUT.json
 
 Each test is a function test_*(m) taking the learner's module. Its docstring says, in plain words,
 what it checks. A test fails by raising AssertionError; the message is shown to the learner.
+Time limits use a thread rather than a signal, so they work the same on Windows, macOS and Linux.
 """
 import importlib.util
 import json
 import os
-import signal
 import sys
+import threading
 
 
 class Timeout(Exception):
     pass
 
 
-def _alarm(*_):
-    raise Timeout()
+def within(seconds, fn, *args):
+    """fn(*args), or Timeout after the given seconds. An overrunning call keeps running in the
+    background; the harness leaves without waiting for it."""
+    box = {}
+
+    def run():
+        try:
+            box["value"] = fn(*args)
+        except BaseException as e:  # noqa: BLE001 - handed back to the caller below
+            box["error"] = e
+
+    worker = threading.Thread(target=run, daemon=True)
+    worker.start()
+    worker.join(seconds)
+    if worker.is_alive():
+        raise Timeout()
+    if "error" in box:
+        raise box["error"]
+    return box.get("value")
 
 
 def load(path, name):
@@ -722,24 +762,19 @@ def main(learner_path, tests_path, out_path):
     names = [n for n in dir(tests) if n.startswith("test_") and callable(getattr(tests, n))]
     names.sort(key=lambda n: getattr(tests, n).__code__.co_firstlineno)
     results, problem, learner = [], None, None
-    shown = os.path.relpath(learner_path)  # the checker runs from the fork's top folder
-    signal.signal(signal.SIGALRM, _alarm)
+    shown = os.path.relpath(learner_path).replace(os.sep, "/")  # the checker runs from the fork's top folder
     if not os.path.isfile(learner_path):
         problem = f"{shown} is not in your fork yet"
     else:
         sys.path.insert(0, os.path.dirname(os.path.abspath(learner_path)))
         try:
-            signal.alarm(20)
-            learner = load(learner_path, "learner")
-            signal.alarm(0)
+            learner = within(20, load, learner_path, "learner")
         except Timeout:
             problem = f"importing {shown} took longer than 20 seconds; keep model calls inside functions"
         except ModuleNotFoundError as e:
-            signal.alarm(0)
             problem = (f"{shown} imports {e.name}, which the tests do not have (only the standard library, openai, pydantic "
                        f"and dotenv). Move that code to another file")
         except BaseException as e:  # noqa: BLE001 - report anything the learner's file raises
-            signal.alarm(0)
             problem = f"{shown} could not be imported: {type(e).__name__}: {e}"
     for n in names:
         fn = getattr(tests, n)
@@ -748,26 +783,25 @@ def main(learner_path, tests_path, out_path):
             results.append({"what": what, "ok": False, "why": problem})
             continue
         try:
-            signal.alarm(10)
-            fn(learner)
-            signal.alarm(0)
+            within(10, fn, learner)
             results.append({"what": what, "ok": True, "why": ""})
         except Timeout:
             results.append({"what": what, "ok": False, "why": "it took longer than 10 seconds"})
         except AssertionError as e:
-            signal.alarm(0)
             results.append({"what": what, "ok": False, "why": str(e) or "the result was not what the exercise expects"})
         except BaseException as e:  # noqa: BLE001
-            signal.alarm(0)
             results.append({"what": what, "ok": False, "why": f"{type(e).__name__}: {e}"})
     for r in results:
         r["why"] = " ".join(str(r["why"]).split())[:220]
-    with open(out_path, "w") as fh:
+    with open(out_path, "w", encoding="utf-8") as fh:
         json.dump(results, fh)
 
 
 if __name__ == "__main__":
     main(sys.argv[1], sys.argv[2], sys.argv[3])
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os._exit(0)  # do not wait for a test that is still running past its limit
 '''
 
 FILES['tests_b0.py'] = r'''"""Tests for plan/block0/python_check.py (run by harness.py)."""

@@ -1,8 +1,8 @@
 {
  "repo": "starlest/llm_engineering",
- "checked_at": "2026-10-12T21:30:09+07:00",
- "checked_label": "12 Oct 2026, 21:30 WIB",
- "commit": "cc77f761",
+ "checked_at": "2026-10-12T21:59:23+07:00",
+ "checked_label": "12 Oct 2026, 21:59 WIB",
+ "commit": "abfb278a",
  "commit_date": "12 Oct 2026",
  "lessons_done": [
   "week1/day1.ipynb",
@@ -95,6 +95,8 @@
   }
  },
  "items_done": [
+  "b0.check",
+  "b0.python",
   "b0.setup"
  ],
  "checks": {
@@ -112,56 +114,151 @@
    ]
   },
   "b0_python": {
-   "pass": 0,
-   "total": 1,
-   "fail": [
-    {
-     "what": "The tests ran",
-     "why": "the tests on plan/block0/python_check.py could not be run; try the check again"
-    }
-   ],
+   "pass": 10,
+   "total": 10,
+   "fail": [],
    "more": 0,
    "items": [
     {
-     "what": "The tests ran",
-     "why": "the tests on plan/block0/python_check.py could not be run; try the check again",
-     "state": "fail"
+     "what": "A new Tally has a total of 0",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "Tally.add collects numbers and Tally.total returns their sum",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "Two Tally objects keep separate totals",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "gather_two is an async function",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "gather_two returns both results, in the order given",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "gather_two runs the two calls at the same time, not one after the other",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "Note accepts {\"title\": \"Intro\", \"words\": 120}",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "Note rejects an empty title",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "Note rejects a negative word count",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "Note rejects a missing field and a word count that is not a number",
+     "why": "",
+     "state": "pass"
     }
    ]
   },
   "b1_build": {
    "pass": 0,
-   "total": 1,
+   "total": 6,
    "fail": [
     {
-     "what": "The tests ran",
-     "why": "the tests on plan/block1/ask.py could not be run; try the check again"
+     "what": "",
+     "why": "plan/block1/ask.py is not in your fork yet"
     }
    ],
    "more": 0,
    "items": [
     {
-     "what": "The tests ran",
-     "why": "the tests on plan/block1/ask.py could not be run; try the check again",
-     "state": "fail"
+     "what": "build_messages returns a system message, then a user message",
+     "why": "plan/block1/ask.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "The system message carries your instructions (20 characters or more)",
+     "why": "plan/block1/ask.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "The user message contains the document and the question",
+     "why": "plan/block1/ask.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "ask returns the model's reply",
+     "why": "plan/block1/ask.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "ask trims blank space around the reply",
+     "why": "plan/block1/ask.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "ask calls the model exactly once, with the messages from build_messages",
+     "why": "plan/block1/ask.py is not in your fork yet",
+     "state": "wait"
     }
    ]
   },
   "b2_build": {
    "pass": 0,
-   "total": 1,
+   "total": 7,
    "fail": [
     {
-     "what": "The tests ran",
-     "why": "the tests on plan/block2/chat.py could not be run; try the check again"
+     "what": "",
+     "why": "plan/block2/chat.py is not in your fork yet"
     }
    ],
    "more": 0,
    "items": [
     {
-     "what": "The tests ran",
-     "why": "the tests on plan/block2/chat.py could not be run; try the check again",
-     "state": "fail"
+     "what": "Answer accepts {\"answer\": ..., \"source\": ...} and rejects an empty answer or a missing source",
+     "why": "plan/block2/chat.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "list_documents returns the sorted names of the .md and .txt files in a folder",
+     "why": "plan/block2/chat.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "run_chat returns an Answer when the model replies with the final JSON straight away",
+     "why": "plan/block2/chat.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "run_chat runs a requested tool, sends back its result, then returns the final Answer",
+     "why": "plan/block2/chat.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "When one reply asks for two tools, run_chat answers both, in order",
+     "why": "plan/block2/chat.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "run_chat raises RuntimeError rather than loop forever (5 model calls at most)",
+     "why": "plan/block2/chat.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "run_chat raises ValueError when the final reply is not the expected JSON",
+     "why": "plan/block2/chat.py is not in your fork yet",
+     "state": "wait"
     }
    ]
   },
@@ -807,14 +904,9 @@
    ]
   },
   "b0_check": {
-   "pass": 1,
+   "pass": 2,
    "total": 2,
-   "fail": [
-    {
-     "what": "python_check.py passes all its tests",
-     "why": "the Python self-check is not done yet"
-    }
-   ],
+   "fail": [],
    "more": 0,
    "items": [
     {
@@ -824,8 +916,8 @@
     },
     {
      "what": "python_check.py passes all its tests",
-     "why": "the Python self-check is not done yet",
-     "state": "wait"
+     "why": "",
+     "state": "pass"
     }
    ]
   },
@@ -869,5 +961,5 @@
  "documents": 76,
  "documents_in": "week5/knowledge-base",
  "tests_isolated": false,
- "checker": "3"
+ "checker": "4"
 }

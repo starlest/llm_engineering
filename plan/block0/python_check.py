@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-
+import asyncio
 
 class Tally:
     def __init__(self):
@@ -12,8 +12,7 @@ class Tally:
         return self.tally
     
 async def gather_two(first, second):
-    await first()
-    await second()
+    return await asyncio.gather(first(), second())
     
 class Note(BaseModel):
     title: str = Field(min_length=1)
