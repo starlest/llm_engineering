@@ -1,0 +1,873 @@
+{
+ "repo": "starlest/llm_engineering",
+ "checked_at": "2026-10-12T20:31:38+07:00",
+ "checked_label": "12 Oct 2026, 20:31 WIB",
+ "commit": "4614ba01",
+ "commit_date": "12 Oct 2026",
+ "lessons_done": [
+  "week1/day1.ipynb",
+  "week1/day2.ipynb",
+  "week1/day4.ipynb",
+  "week1/day5.ipynb"
+ ],
+ "lesson_weeks": {
+  "1": {
+   "worked": 4,
+   "total": 5,
+   "todo": [
+    "week1 EXERCISE"
+   ]
+  },
+  "2": {
+   "worked": 0,
+   "total": 6,
+   "todo": [
+    "day1",
+    "day2",
+    "day3",
+    "day4",
+    "day5",
+    "week2 EXERCISE"
+   ]
+  },
+  "3": {
+   "worked": 0,
+   "total": 5,
+   "todo": [
+    "day1",
+    "day2",
+    "day3",
+    "day4",
+    "day5"
+   ]
+  },
+  "4": {
+   "worked": 0,
+   "total": 3,
+   "todo": [
+    "day3",
+    "day4",
+    "day5"
+   ]
+  },
+  "5": {
+   "worked": 0,
+   "total": 5,
+   "todo": [
+    "day1",
+    "day2",
+    "day3",
+    "day4",
+    "day5"
+   ]
+  },
+  "6": {
+   "worked": 0,
+   "total": 5,
+   "todo": [
+    "day1",
+    "day2",
+    "day3",
+    "day4",
+    "day5"
+   ]
+  },
+  "7": {
+   "worked": 0,
+   "total": 4,
+   "todo": [
+    "day1",
+    "day2",
+    "day3 and 4",
+    "day5"
+   ]
+  },
+  "8": {
+   "worked": 0,
+   "total": 5,
+   "todo": [
+    "day1",
+    "day2",
+    "day3",
+    "day4",
+    "day5"
+   ]
+  }
+ },
+ "items_done": [
+  "b0.setup"
+ ],
+ "checks": {
+  "b0_setup": {
+   "pass": 1,
+   "total": 1,
+   "fail": [],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/README.md is in your fork",
+     "why": "",
+     "state": "pass"
+    }
+   ]
+  },
+  "b0_python": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "The tests ran",
+     "why": "the tests on plan/block0/python_check.py could not be run; try the check again"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "The tests ran",
+     "why": "the tests on plan/block0/python_check.py could not be run; try the check again",
+     "state": "fail"
+    }
+   ]
+  },
+  "b1_build": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "The tests ran",
+     "why": "the tests on plan/block1/ask.py could not be run; try the check again"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "The tests ran",
+     "why": "the tests on plan/block1/ask.py could not be run; try the check again",
+     "state": "fail"
+    }
+   ]
+  },
+  "b2_build": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "The tests ran",
+     "why": "the tests on plan/block2/chat.py could not be run; try the check again"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "The tests ran",
+     "why": "the tests on plan/block2/chat.py could not be run; try the check again",
+     "state": "fail"
+    }
+   ]
+  },
+  "b1_check": {
+   "pass": 0,
+   "total": 4,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block1/answers.json is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block1/answers.json is a JSON list",
+     "why": "plan/block1/answers.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "It has at least 5 entries, each with a question, a document and an answer",
+     "why": "plan/block1/answers.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Every document is the path of a real document, such as plan/docs/wrestlemania/wrestlemania-03.md",
+     "why": "plan/block1/answers.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "No question repeats",
+     "why": "there are no complete entries yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b2_check": {
+   "pass": 0,
+   "total": 4,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block2/transcript.json is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block2/transcript.json is the list of messages from one real chat",
+     "why": "plan/block2/transcript.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "The model asks for a tool at least once (an assistant message with tool_calls)",
+     "why": "plan/block2/transcript.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Every tool call is answered by a tool message with the same tool_call_id",
+     "why": "plan/block2/transcript.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "The last message is the assistant's final JSON: {\"answer\": ..., \"source\": ...}",
+     "why": "plan/block2/transcript.json is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b3_build": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block3/compare.py is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block3/compare.py is in your fork (200+ characters)",
+     "why": "plan/block3/compare.py is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b3_check": {
+   "pass": 0,
+   "total": 3,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block3/comparison.json is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block3/comparison.json is a JSON list of at least 5 questions",
+     "why": "plan/block3/comparison.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Each entry has question, small and frontier (each {\"model\", \"answer\"}) and small_ok (true or false)",
+     "why": "plan/block3/comparison.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "The small model and the frontier model are different models",
+     "why": "there are no complete entries yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b4_build": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block4/evaluate.py is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block4/evaluate.py is in your fork (200+ characters)",
+     "why": "plan/block4/evaluate.py is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b4_check": {
+   "pass": 0,
+   "total": 5,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block4/questions.jsonl is not in your fork yet"
+    },
+    {
+     "what": "",
+     "why": "plan/block4/results.json is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block4/questions.jsonl has 20 to 30 questions, one JSON object per line",
+     "why": "plan/block4/questions.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Each has id, question, expected and source, and no id repeats",
+     "why": "plan/block4/questions.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Every source is the path of a real document, such as plan/docs/wrestlemania/wrestlemania-03.md",
+     "why": "plan/block4/questions.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "plan/block4/results.json records floor and ceiling, each as {\"correct\": n, \"total\": n}",
+     "why": "plan/block4/results.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Both totals equal the number of questions, and the ceiling is not below the floor",
+     "why": "plan/block4/results.json is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b5_build": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block5/rag.py is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block5/rag.py is in your fork (200+ characters)",
+     "why": "plan/block5/rag.py is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b5_check": {
+   "pass": 0,
+   "total": 5,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block5/runs.jsonl is not in your fork yet"
+    },
+    {
+     "what": "",
+     "why": "plan/block5/results.json is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block5/runs.jsonl has one run for every question id in plan/block4/questions.jsonl",
+     "why": "plan/block5/runs.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Each run lists what it retrieved: 1 to 20 chunks, each with the path of a real document as source, and its text",
+     "why": "plan/block5/runs.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Each run's source is one of its retrieved sources, or \"none\"",
+     "why": "plan/block5/runs.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Each run has an answer and a correct of true or false",
+     "why": "plan/block5/runs.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "plan/block5/results.json has rag as {\"correct\": n, \"total\": n}, matching the runs marked correct",
+     "why": "plan/block5/results.json is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b6_build": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block6/experiments.py is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block6/experiments.py is in your fork (200+ characters)",
+     "why": "plan/block6/experiments.py is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b6_check": {
+   "pass": 0,
+   "total": 3,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block6/experiments.json is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block6/experiments.json is a JSON list of at least 3 experiments",
+     "why": "plan/block6/experiments.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "Each has change (what you changed, 10+ characters), correct and total",
+     "why": "plan/block6/experiments.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "No two experiments describe the same change",
+     "why": "plan/block6/experiments.json is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b7_build": {
+   "pass": 0,
+   "total": 2,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block7/judge.py is not in your fork yet"
+    },
+    {
+     "what": "",
+     "why": "plan/block7/judge_prompt.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block7/judge.py is in your fork (200+ characters)",
+     "why": "plan/block7/judge.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "plan/block7/judge_prompt.md is in your fork (200+ characters)",
+     "why": "plan/block7/judge_prompt.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b7_check": {
+   "pass": 0,
+   "total": 5,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block7/questions.jsonl is not in your fork yet"
+    },
+    {
+     "what": "",
+     "why": "plan/block7/judged.jsonl is not in your fork yet"
+    },
+    {
+     "what": "",
+     "why": "plan/block7/finetuning.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block7/questions.jsonl has at least 50 questions with id, question, expected, source and answerable",
+     "why": "plan/block7/questions.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "At least 5 cannot be answered from the documents (answerable false, source \"none\")",
+     "why": "plan/block7/questions.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "plan/block7/judged.jsonl has a judge verdict of \"pass\" or \"fail\" for every question id",
+     "why": "plan/block7/judged.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "At least 20 of them also carry your own grade in human",
+     "why": "plan/block7/judged.jsonl is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "plan/block7/finetuning.md says whether fine-tuning would help your project (400+ characters)",
+     "why": "plan/block7/finetuning.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b8_build": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block8/agent.py is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block8/agent.py is in your fork (200+ characters)",
+     "why": "plan/block8/agent.py is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b8_check": {
+   "pass": 0,
+   "total": 5,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block8/trace.json is not in your fork yet"
+    },
+    {
+     "what": "",
+     "why": "plan/block8/results.json is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block8/trace.json records one run: a question and a list of steps",
+     "why": "plan/block8/trace.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "The run searches at least twice (tool_call steps whose name contains search or retrieve)",
+     "why": "plan/block8/trace.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "A tool that changes something runs only after an approval step with approved true",
+     "why": "plan/block8/trace.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "The run ends with an answer step holding answer and source",
+     "why": "plan/block8/trace.json is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "plan/block8/results.json has agent with correct, total, cost_usd and seconds_per_question",
+     "why": "plan/block8/results.json is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b9_build": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block9/api.py is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block9/api.py is in your fork (200+ characters)",
+     "why": "plan/block9/api.py is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b9_deploy": {
+   "pass": 0,
+   "total": 2,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block9/Dockerfile is not in your fork yet"
+    },
+    {
+     "what": "",
+     "why": "plan/block9/README.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block9/Dockerfile is in your fork (40+ characters)",
+     "why": "plan/block9/Dockerfile is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "plan/block9/README.md gives the public https link to your assistant",
+     "why": "plan/block9/README.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b9_readme": {
+   "pass": 0,
+   "total": 2,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block9/README.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block9/README.md has a results table with rows for floor, ceiling, RAG and agent, each with a number",
+     "why": "plan/block9/README.md is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "It lists at least three known failures under a \"Known failures\" heading",
+     "why": "plan/block9/README.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b1_read": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block1/notes.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block1/notes.md holds your notes for this block (100+ characters)",
+     "why": "plan/block1/notes.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b2_read": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block2/notes.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block2/notes.md holds your notes for this block (100+ characters)",
+     "why": "plan/block2/notes.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b3_read": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block3/notes.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block3/notes.md holds your notes for this block (100+ characters)",
+     "why": "plan/block3/notes.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b4_read": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block4/notes.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block4/notes.md holds your notes for this block (100+ characters)",
+     "why": "plan/block4/notes.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b5_read": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block5/notes.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block5/notes.md holds your notes for this block (100+ characters)",
+     "why": "plan/block5/notes.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b6_read": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block6/notes.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block6/notes.md holds your notes for this block (100+ characters)",
+     "why": "plan/block6/notes.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b7_read": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block7/notes.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block7/notes.md holds your notes for this block (100+ characters)",
+     "why": "plan/block7/notes.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b8_read": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block8/notes.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block8/notes.md holds your notes for this block (100+ characters)",
+     "why": "plan/block8/notes.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b9_read": {
+   "pass": 0,
+   "total": 1,
+   "fail": [
+    {
+     "what": "",
+     "why": "plan/block9/notes.md is not in your fork yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "plan/block9/notes.md holds your notes for this block (100+ characters)",
+     "why": "plan/block9/notes.md is not in your fork yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b0_check": {
+   "pass": 1,
+   "total": 2,
+   "fail": [
+    {
+     "what": "python_check.py passes all its tests",
+     "why": "the Python self-check is not done yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "Set up is done",
+     "why": "",
+     "state": "pass"
+    },
+    {
+     "what": "python_check.py passes all its tests",
+     "why": "the Python self-check is not done yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "b9_check": {
+   "pass": 0,
+   "total": 3,
+   "fail": [
+    {
+     "what": "The assistant is behind an API",
+     "why": "the API item is not done yet"
+    },
+    {
+     "what": "It is in a container and deployed, with its link in the README",
+     "why": "the deploy item is not done yet"
+    },
+    {
+     "what": "The README shows every score and three known failures",
+     "why": "the README item is not done yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "The assistant is behind an API",
+     "why": "the API item is not done yet",
+     "state": "wait"
+    },
+    {
+     "what": "It is in a container and deployed, with its link in the README",
+     "why": "the deploy item is not done yet",
+     "state": "wait"
+    },
+    {
+     "what": "The README shows every score and three known failures",
+     "why": "the README item is not done yet",
+     "state": "wait"
+    }
+   ]
+  }
+ },
+ "documents": 76,
+ "documents_in": "week5/knowledge-base",
+ "tests_isolated": false,
+ "checker": "3"
+}
