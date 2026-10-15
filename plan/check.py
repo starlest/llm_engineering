@@ -1997,7 +1997,7 @@ class FakeEncoding:
             raise TypeError(f"argument 'tokens': '{type(tokens).__name__}' object cannot be converted to 'Sequence'")
         tokens = list(tokens)
         self.calls.append(("decode", tokens))
-        return "".join(self._back.get(t, "�") for t in tokens)
+        return "".join(self._back.get(t, "\ufffd") for t in tokens)
 
     def decode_single_token_bytes(self, token):
         return self._back.get(token, "").encode("utf-8")
