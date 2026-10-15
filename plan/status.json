@@ -1,20 +1,19 @@
 {
  "repo": "starlest/llm_engineering",
- "checked_at": "2026-10-12T21:59:23+07:00",
- "checked_label": "12 Oct 2026, 21:59 WIB",
- "commit": "abfb278a",
- "commit_date": "12 Oct 2026",
- "lessons_done": [
-  "week1/day1.ipynb",
-  "week1/day2.ipynb",
-  "week1/day4.ipynb",
-  "week1/day5.ipynb"
- ],
+ "checked_at": "2026-10-15T17:04:41+07:00",
+ "checked_label": "15 Oct 2026, 17:04 WIB",
+ "commit": "a0adedc",
+ "commit_date": "14 Oct 2026",
+ "lessons_done": [],
  "lesson_weeks": {
   "1": {
-   "worked": 4,
+   "worked": 0,
    "total": 5,
    "todo": [
+    "day1",
+    "day2",
+    "day4",
+    "day5",
     "week1 EXERCISE"
    ]
   },
@@ -100,6 +99,2005 @@
   "b0.setup"
  ],
  "checks": {
+  "week1/day1_ipynb": {
+   "pass": 0,
+   "total": 6,
+   "fail": [
+    {
+     "what": "SYSTEM_PROMPT is your system prompt, and it asks for a subject line",
+     "why": "plan/exercises/week1/day1.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "SYSTEM_PROMPT is your system prompt, and it asks for a subject line",
+     "why": "plan/exercises/week1/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "messages_for gives SYSTEM_PROMPT as a system message, then one user message",
+     "why": "plan/exercises/week1/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "The user message holds the whole email, plus your instruction",
+     "why": "plan/exercises/week1/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "suggest_subject sends messages_for(email) in one chat.completions.create call",
+     "why": "plan/exercises/week1/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "suggest_subject uses gpt-4.1-mini unless it is given another model",
+     "why": "plan/exercises/week1/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "suggest_subject returns choices[0].message.content without spaces around it",
+     "why": "plan/exercises/week1/day1.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week1/day2_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "ask_over_http posts once to https://api.openai.com/v1/chat/completions",
+     "why": "plan/exercises/week1/day2.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "ask_over_http posts once to https://api.openai.com/v1/chat/completions",
+     "why": "plan/exercises/week1/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "ask_over_http sends the key as a Bearer token, with a JSON content type",
+     "why": "plan/exercises/week1/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "The JSON body holds the model (gpt-5-nano unless given) and the question as a user message",
+     "why": "plan/exercises/week1/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "ask_over_http returns the first choice's content from response.json()",
+     "why": "plan/exercises/week1/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "client_for builds OpenAI clients at the default, Gemini and Ollama base URLs",
+     "why": "plan/exercises/week1/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "client_for uses your key for openai and gemini, and the key \"ollama\" for Ollama",
+     "why": "plan/exercises/week1/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "summarize sends a system message, then a user message holding the page, in one request",
+     "why": "plan/exercises/week1/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "summarize uses llama3.2 unless given another model, and returns the reply's text",
+     "why": "plan/exercises/week1/day2.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week1/day4_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "token_pieces gets the encoding for gpt-4.1-mini, or for the model it is given",
+     "why": "plan/exercises/week1/day4.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "token_pieces gets the encoding for gpt-4.1-mini, or for the model it is given",
+     "why": "plan/exercises/week1/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "token_pieces pairs each token id with its text, decoding one id at a time",
+     "why": "plan/exercises/week1/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "count_tokens adds up the tokens of every message's content",
+     "why": "plan/exercises/week1/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat sends the conversation, then your message as a user message, in one request",
+     "why": "plan/exercises/week1/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat uses gpt-4.1-mini unless given another model, and returns the reply's text",
+     "why": "plan/exercises/week1/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat and remember leave the conversation they were given unchanged",
+     "why": "plan/exercises/week1/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "remember adds your message and the reply, as user then assistant, to a new list",
+     "why": "plan/exercises/week1/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "Over two turns, the second request repeats the first question and its answer",
+     "why": "plan/exercises/week1/day4.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week1/day5_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "select_links's system prompt asks for JSON, with an example using links, type and url",
+     "why": "plan/exercises/week1/day5.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "select_links's system prompt asks for JSON, with an example using links, type and url",
+     "why": "plan/exercises/week1/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "The user message names the page's url and puts each link on a line of its own",
+     "why": "plan/exercises/week1/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "select_links turns on JSON mode and returns the reply parsed with json.loads",
+     "why": "plan/exercises/week1/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "select_links uses gpt-5-nano unless it is given another model",
+     "why": "plan/exercises/week1/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_tribute streams a system prompt and a user prompt cut to 5,000 characters",
+     "why": "plan/exercises/week1/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_tribute yields the growing text, ending with the whole reply",
+     "why": "plan/exercises/week1/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_tribute uses gpt-4.1-mini unless it is given another model",
+     "why": "plan/exercises/week1/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "tribute picks links (JSON), fetches the page then each pick, then streams the tribute",
+     "why": "plan/exercises/week1/day5.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week1/week1 EXERCISE_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "tutor_messages gives a tutor system prompt, then a user message holding the question",
+     "why": "plan/exercises/week1/week1_exercise.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "tutor_messages gives a tutor system prompt, then a user message holding the question",
+     "why": "plan/exercises/week1/week1_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_answer makes one request with tutor_messages(question) and stream=True",
+     "why": "plan/exercises/week1/week1_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_answer uses gpt-4o-mini unless it is given another model",
+     "why": "plan/exercises/week1/week1_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_answer yields the growing answer, ending with the whole reply",
+     "why": "plan/exercises/week1/week1_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_answer yields its first text before it reads the rest of the stream",
+     "why": "plan/exercises/week1/week1_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "answer makes one request, not streamed, and returns choices[0].message.content",
+     "why": "plan/exercises/week1/week1_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "answer uses llama3.2 unless it is given another model",
+     "why": "plan/exercises/week1/week1_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "ollama_client points an OpenAI client at http://localhost:11434/v1 with the key \"ollama\"",
+     "why": "plan/exercises/week1/week1_exercise.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week2/day1_ipynb": {
+   "pass": 0,
+   "total": 9,
+   "fail": [
+    {
+     "what": "make_clients({}) gives only the Ollama client: localhost:11434/v1 with the key 'ollama'",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "make_clients({}) gives only the Ollama client: localhost:11434/v1 with the key 'ollama'",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_clients points each provider with a key at its base_url, and skips missing keys",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "bot_messages shows each speaker its own lines as assistant and the other's as user",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "turn_messages sends the speaker's persona as the system message, then one user message",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "turn_messages' user message lists 'Name: text' lines in order and names the speaker",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "next_line makes one create call with turn_messages and returns the reply text, stripped",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "next_line uses gpt-4.1-mini by default and passes another model through",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "debate asks each speaker in cast order, each round, with its own client and model",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "Each speaker hears every line said before it; the opening list stays unchanged",
+     "why": "plan/exercises/week2/day1.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week2/day2_ipynb": {
+   "pass": 0,
+   "total": 9,
+   "fail": [
+    {
+     "what": "SYSTEM is your system message, and it asks for markdown",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "SYSTEM is your system message, and it asks for markdown",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_text sends SYSTEM, then the prompt, in one request with stream=True",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_text uses gpt-4.1-mini by default and passes another model through",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_text yields the reply as it grows, chunk by chunk, ending with the whole reply",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_model streams from the chosen name's client, with that name's model",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "An unknown model name raises ValueError naming the choices, and calls no client",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_preview yields '' before it fetches the page, then the preview as it grows",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_preview fetches the URL once and sends the event name and the page text",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "build_page makes a gr.Interface around fn: two Textboxes and a Dropdown in, Markdown out",
+     "why": "plan/exercises/week2/day2.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week2/day3_ipynb": {
+   "pass": 0,
+   "total": 9,
+   "fail": [
+    {
+     "what": "SYSTEM is your store's system message, 20 characters or more",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "SYSTEM is your store's system message, 20 characters or more",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "to_messages puts the system message first, then the history, then the new message",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "to_messages keeps only role and content, and leaves the history it was given unchanged",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "system_for returns the base prompt as it is when the message does not mention autographs",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "system_for adds the no-autographs line when the message mentions autograph, in any case",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat makes one create call with the built messages and returns the reply's text",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat uses gpt-4.1-mini by default and passes another model through",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_chat calls create with stream=True and yields the reply as it grows",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "stream_chat's autograph line is for that turn only; SYSTEM and history stay unchanged",
+     "why": "plan/exercises/week2/day3.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week2/day4_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "get_event_date matches whole names in any case, outer spaces trimmed; else 'unknown'",
+     "why": "plan/exercises/week2/day4.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "get_event_date matches whole names in any case, outer spaces trimmed; else 'unknown'",
+     "why": "plan/exercises/week2/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "set_event_date saves a date that get_event_date then finds, and confirms it",
+     "why": "plan/exercises/week2/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "TOOLS describes both tools, with their string parameters required and nothing else allowed",
+     "why": "plan/exercises/week2/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "handle_tool_calls answers each call of the SDK message, in order, with its tool_call_id",
+     "why": "plan/exercises/week2/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "handle_tool_calls runs set_event_date, and answers any other tool with 'unknown tool'",
+     "why": "plan/exercises/week2/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat sends SYSTEM, the history and the message, with tools=TOOLS and gpt-4.1-mini",
+     "why": "plan/exercises/week2/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat runs the tool calls and asks again with the model's message and the tool results",
+     "why": "plan/exercises/week2/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat keeps going while the model asks for tools, then returns its text answer",
+     "why": "plan/exercises/week2/day4.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week2/day5_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "artist asks images.generate for one 1024x1024 gpt-image-1-mini picture of the subject",
+     "why": "plan/exercises/week2/day5.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "artist asks images.generate for one 1024x1024 gpt-image-1-mini picture of the subject",
+     "why": "plan/exercises/week2/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "artist returns the bytes decoded from data[0].b64_json, and passes a model through",
+     "why": "plan/exercises/week2/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "talker sends the text to audio.speech.create (gpt-4o-mini-tts, onyx) and returns .content",
+     "why": "plan/exercises/week2/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "handle_tool_calls_and_return_events answers each call and lists the events looked up",
+     "why": "plan/exercises/week2/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "put_message_in_chatbot clears the textbox and returns a new history with the message",
+     "why": "plan/exercises/week2/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat runs the tool loop with TOOLS and returns the history plus the assistant's reply",
+     "why": "plan/exercises/week2/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat speaks the reply and draws the first event the tools looked up",
+     "why": "plan/exercises/week2/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "Without a tool call, chat still speaks the reply but draws nothing (image None)",
+     "why": "plan/exercises/week2/day5.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week2/week2 EXERCISE_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "EXPERTISE holds at least two named system prompts, each different",
+     "why": "plan/exercises/week2/week2_exercise.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "EXPERTISE holds at least two named system prompts, each different",
+     "why": "plan/exercises/week2/week2_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "model_menu always offers 'Llama 3.2' through Ollama at localhost:11434/v1, key 'ollama'",
+     "why": "plan/exercises/week2/week2_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "model_menu adds GPT-4o mini and Claude Haiku only when their keys are set, with those keys",
+     "why": "plan/exercises/week2/week2_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "build_messages: the expertise's prompt, the history (role and content), then the question",
+     "why": "plan/exercises/week2/week2_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "build_messages raises ValueError for an unknown expertise, listing every choice",
+     "why": "plan/exercises/week2/week2_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "answer streams from the chosen client and model, with build_messages' messages",
+     "why": "plan/exercises/week2/week2_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "answer yields the whole chat: question with an empty answer, then the growing answer",
+     "why": "plan/exercises/week2/week2_exercise.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "An unknown model or expertise raises ValueError before any yield or request",
+     "why": "plan/exercises/week2/week2_exercise.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week3/day1_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "hf_login reads the HF_TOKEN secret and logs in with add_to_git_credential=True",
+     "why": "plan/exercises/week3/day1.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "hf_login reads the HF_TOKEN secret and logs in with add_to_git_credential=True",
+     "why": "plan/exercises/week3/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "hf_login raises ValueError for a missing or non-hf_ token, and does not log in",
+     "why": "plan/exercises/week3/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_text_to_image loads stabilityai/sdxl-turbo with the given torch_dtype, variant fp16",
+     "why": "plan/exercises/week3/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_text_to_image passes another model through and returns it moved to the device",
+     "why": "plan/exercises/week3/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_image passes prompt, num_inference_steps and guidance_scale, returns images[0]",
+     "why": "plan/exercises/week3/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "refine runs the base to high_noise_frac and asks it for latents",
+     "why": "plan/exercises/week3/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "refine gives the refiner the base's .images from the same point, returns its images[0]",
+     "why": "plan/exercises/week3/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "announce sends forward_params={\"speaker_embeddings\": ...}, returns (audio, sampling_rate)",
+     "why": "plan/exercises/week3/day1.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week3/day2_ipynb": {
+   "pass": 0,
+   "total": 7,
+   "fail": [
+    {
+     "what": "fan_moods makes one sentiment-analysis pipeline on \"cuda\" and returns the labels in order",
+     "why": "plan/exercises/week3/day2.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "fan_moods makes one sentiment-analysis pipeline on \"cuda\" and returns the labels in order",
+     "why": "plan/exercises/week3/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "fan_moods uses the task's default model unless given one, and passes the device through",
+     "why": "plan/exercises/week3/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "match_topic sends the text and candidate_labels, and returns the top-scoring label",
+     "why": "plan/exercises/week3/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "ask calls question-answering with question= and context=, and returns the answer",
+     "why": "plan/exercises/week3/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "summarize sends max_length, min_length and do_sample=False, returns [0][\"summary_text\"]",
+     "why": "plan/exercises/week3/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "to_spanish makes translation_en_to_es with Helsinki-NLP/opus-mt-en-es on \"cuda\" by default",
+     "why": "plan/exercises/week3/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "to_spanish passes another model and device through, and returns [0][\"translation_text\"]",
+     "why": "plan/exercises/week3/day2.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week3/day3_ipynb": {
+   "pass": 0,
+   "total": 6,
+   "fail": [
+    {
+     "what": "load_tokenizers calls from_pretrained once per name and keys each tokenizer by name",
+     "why": "plan/exercises/week3/day3.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "load_tokenizers calls from_pretrained once per name and keys each tokenizer by name",
+     "why": "plan/exercises/week3/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "token_counts gives characters, words and the number of ids tokenizer.encode returns",
+     "why": "plan/exercises/week3/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "token_pieces gives the text of every token, in order, <|begin_of_text|> first",
+     "why": "plan/exercises/week3/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat_prompt sends a system message, then a user message, to apply_chat_template",
+     "why": "plan/exercises/week3/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat_prompt asks for text with the generation prompt and returns the template's string",
+     "why": "plan/exercises/week3/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "compare_tokenizers counts the tokens each tokenizer makes of the same text",
+     "why": "plan/exercises/week3/day3.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week3/day4_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "four_bit_config makes BitsAndBytesConfig: 4 bits, double quant, nf4, given compute dtype",
+     "why": "plan/exercises/week3/day4.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "four_bit_config makes BitsAndBytesConfig: 4 bits, double quant, nf4, given compute dtype",
+     "why": "plan/exercises/week3/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_model loads meta-llama/Llama-3.2-1B-Instruct with device_map=\"auto\" by default",
+     "why": "plan/exercises/week3/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_model passes a given model name and quantization_config through to from_pretrained",
+     "why": "plan/exercises/week3/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat_inputs sets the tokenizer's pad_token to its eos_token",
+     "why": "plan/exercises/week3/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat_inputs applies the template with return_tensors=\"pt\" and add_generation_prompt=True",
+     "why": "plan/exercises/week3/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat_inputs moves the ids to the device, \"cuda\" by default, and returns them",
+     "why": "plan/exercises/week3/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "generate_reply calls model.generate with the inputs, max_new_tokens and any streamer",
+     "why": "plan/exercises/week3/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "generate_reply returns only the reply: the new tokens, decoded without special tokens",
+     "why": "plan/exercises/week3/day4.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week3/day5_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "transcribe_open makes an automatic-speech-recognition pipeline with return_timestamps=True",
+     "why": "plan/exercises/week3/day5.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "transcribe_open makes an automatic-speech-recognition pipeline with return_timestamps=True",
+     "why": "plan/exercises/week3/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "transcribe_open uses whisper-medium.en unless told otherwise, and returns result[\"text\"]",
+     "why": "plan/exercises/week3/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "transcribe_openai sends the file to audio.transcriptions.create, asking for text back",
+     "why": "plan/exercises/week3/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "transcribe_openai uses gpt-4o-mini-transcribe by default and returns the transcript text",
+     "why": "plan/exercises/week3/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "minutes_messages is a system message, then a user message with the meeting and transcript",
+     "why": "plan/exercises/week3/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "minutes_messages asks for markdown minutes: summary, discussion, takeaways, action owners",
+     "why": "plan/exercises/week3/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "write_minutes builds the inputs as on Day 4 and generates up to max_new_tokens (2000)",
+     "why": "plan/exercises/week3/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "write_minutes returns only the new text, without special tokens",
+     "why": "plan/exercises/week3/day5.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week4/day3_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "SYSTEM_PROMPT names C++ and asks for C++ code only, with identical output",
+     "why": "plan/exercises/week4/day3.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "SYSTEM_PROMPT names C++ and asks for C++ code only, with identical output",
+     "why": "plan/exercises/week4/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "messages_for gives SYSTEM_PROMPT as the system message, then one user message",
+     "why": "plan/exercises/week4/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "The user message holds the fenced Python, the system info and the compile command",
+     "why": "plan/exercises/week4/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "port sends one request with the messages given, to gpt-5 with high reasoning effort",
+     "why": "plan/exercises/week4/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "port passes a given model through, and non-GPT models get no reasoning effort",
+     "why": "plan/exercises/week4/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "port returns the code from choices[0].message.content, without its fence lines",
+     "why": "plan/exercises/week4/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "frontier_clients points OpenAI, Claude, Gemini and Grok at their URLs, with their keys",
+     "why": "plan/exercises/week4/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "frontier_clients leaves out a provider whose key is missing or empty",
+     "why": "plan/exercises/week4/day3.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week4/day4_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "open_source_clients reaches Ollama at localhost:11434/v1 with the key 'ollama'",
+     "why": "plan/exercises/week4/day4.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "open_source_clients reaches Ollama at localhost:11434/v1 with the key 'ollama'",
+     "why": "plan/exercises/week4/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "open_source_clients adds Groq and OpenRouter, each with its own key, when it is set",
+     "why": "plan/exercises/week4/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "port_with sends one request to the client of the model asked for, with the messages given",
+     "why": "plan/exercises/week4/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "port_with asks gpt-5 for high reasoning effort, and no other model, gpt-oss included",
+     "why": "plan/exercises/week4/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "port_with returns the code from the reply, without its fence lines",
+     "why": "plan/exercises/week4/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "run_python returns what the program prints, and its functions can call each other",
+     "why": "plan/exercises/week4/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "run_python returns 'Error: ...' when the program fails, and gives stdout back",
+     "why": "plan/exercises/week4/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "run_python runs each program in a fresh namespace",
+     "why": "plan/exercises/week4/day4.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week4/day5_ipynb": {
+   "pass": 0,
+   "total": 7,
+   "fail": [
+    {
+     "what": "ask_for_commands sends one user message holding the system and toolchain details",
+     "why": "plan/exercises/week4/day5.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "ask_for_commands sends one user message holding the system and toolchain details",
+     "why": "plan/exercises/week4/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "The question names the language and its file, asks for compile_command and run_command",
+     "why": "plan/exercises/week4/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "ask_for_commands uses gpt-5 by default, passes a given model, and returns the reply",
+     "why": "plan/exercises/week4/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "messages_for writes the system prompt for the language asked, and names no other",
+     "why": "plan/exercises/week4/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "The user message names the language, its file, the command, system info and the code",
+     "why": "plan/exercises/week4/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "compile_and_run writes the file, compiles, runs, and returns what the program printed",
+     "why": "plan/exercises/week4/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "compile_and_run returns 'An error occurred:' and the error when a step fails",
+     "why": "plan/exercises/week4/day5.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week5/day1_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "relevant_docs returns the documents whose key is a word of the question, in its order",
+     "why": "plan/exercises/week5/day1.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "relevant_docs returns the documents whose key is a word of the question, in its order",
+     "why": "plan/exercises/week5/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "relevant_docs reads past punctuation and 's, ignores case, and gives each document once",
+     "why": "plan/exercises/week5/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "additional_context gives an opening line, then the found documents a blank line apart",
+     "why": "plan/exercises/week5/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "additional_context gives a sentence of your own, with no document, when nothing matches",
+     "why": "plan/exercises/week5/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "SYSTEM_PREFIX names WWE and says what to do when the answer is not known",
+     "why": "plan/exercises/week5/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat sends one request: system prompt plus context, the history, then the message",
+     "why": "plan/exercises/week5/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat finds the context from the new message only, and leaves the history unchanged",
+     "why": "plan/exercises/week5/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chat uses gpt-4.1-nano unless given a model, and returns the reply's text",
+     "why": "plan/exercises/week5/day1.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week5/day2_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "load_documents makes one DirectoryLoader per folder, with TextLoader reading UTF-8",
+     "why": "plan/exercises/week5/day2.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "load_documents makes one DirectoryLoader per folder, with TextLoader reading UTF-8",
+     "why": "plan/exercises/week5/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_documents loads every .md file below each folder and tags it with that folder",
+     "why": "plan/exercises/week5/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_chunks builds the splitter with 1000 and 200, or the sizes given",
+     "why": "plan/exercises/week5/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_chunks returns split_documents' chunks, which keep each document's doc_type",
+     "why": "plan/exercises/week5/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "create_vectorstore stores the chunks with from_documents in db_name",
+     "why": "plan/exercises/week5/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "create_vectorstore deletes the old collection first when db_name already exists",
+     "why": "plan/exercises/week5/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "vector_stats returns the number of vectors and how many numbers each one has",
+     "why": "plan/exercises/week5/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "vector_stats returns (0, 0) for an empty store",
+     "why": "plan/exercises/week5/day2.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week5/day3_ipynb": {
+   "pass": 0,
+   "total": 7,
+   "fail": [
+    {
+     "what": "make_retriever opens db_name with the embeddings and returns its retriever",
+     "why": "plan/exercises/week5/day3.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "make_retriever opens db_name with the embeddings and returns its retriever",
+     "why": "plan/exercises/week5/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_llm builds ChatOpenAI with temperature 0 and gpt-4.1-nano by default",
+     "why": "plan/exercises/week5/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_llm passes on the model and temperature it is given",
+     "why": "plan/exercises/week5/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "The template has one {context} slot, names WWE and says what to do when unsure",
+     "why": "plan/exercises/week5/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "answer_question asks the retriever once, with the question",
+     "why": "plan/exercises/week5/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "The system message is the template filled with the documents, a blank line apart",
+     "why": "plan/exercises/week5/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "Then comes one human message with the question; the reply's .content is returned",
+     "why": "plan/exercises/week5/day3.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week5/day4_ipynb": {
+   "pass": 0,
+   "total": 9,
+   "fail": [
+    {
+     "what": "AnswerEval has feedback, accuracy, completeness and relevance, each described",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "AnswerEval has feedback, accuracy, completeness and relevance, each described",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "judge_messages sends a system message, then a user message with all three texts",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "judge_messages asks for accuracy, completeness and relevance from 1 to 5",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "judge makes one completion call with judge_messages and response_format=AnswerEval",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "judge uses gpt-4.1-nano unless given a model, and returns the reply as an AnswerEval",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "reciprocal_rank is 1 divided by the rank of the first document from the source",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "reciprocal_rank reads Windows paths too, and is 0.0 when no document is from the source",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "ndcg is 0.6509 for miss, hit, miss, hit, and 1.0 when the only hit comes first",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "ndcg is 0.0 with nothing relevant and looks only at the first k documents, 10 by default",
+     "why": "plan/exercises/week5/day4.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week5/day5_ipynb": {
+   "pass": 0,
+   "total": 9,
+   "fail": [
+    {
+     "what": "Chunk has headline, summary and original_text, each described; Chunks lists them",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "Chunk has headline, summary and original_text, each described; Chunks lists them",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "as_result joins headline, summary and text a blank line apart, with source and type",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chunk_document sends one user message with the text, type, source, count and overlap",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "chunk_document asks for Chunks from gpt-4.1-nano or the model given; returns Results",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "retrieve embeds the question once and asks the collection for the k nearest",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "retrieve returns Results with the documents and their metadata, nearest first",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "rerank sends a system message, then the question and each chunk under # CHUNK ID: n:",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "rerank asks gpt-4.1-nano for a RankOrder and returns the chunks in that order, ids from 1",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "rewrite_query shows the history and the question, and returns the reply stripped",
+     "why": "plan/exercises/week5/day5.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week6/day1_ipynb": {
+   "pass": 0,
+   "total": 7,
+   "fail": [
+    {
+     "what": "dedupe keeps the first item of each title, then the first of each full text, in order",
+     "why": "plan/exercises/week6/day1.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "dedupe keeps the first item of each title, then the first of each full text, in order",
+     "why": "plan/exercises/week6/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "dedupe compares full texts only among the items it kept, and leaves your list unchanged",
+     "why": "plan/exercises/week6/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "sampling_weights squares the min-max scaled prices and makes them sum to 1",
+     "why": "plan/exercises/week6/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "sampling_weights multiplies each damped category's weights by its factor",
+     "why": "plan/exercises/week6/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "draw_sample returns size different items and never one with a weight of 0",
+     "why": "plan/exercises/week6/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "draw_sample matches np.random.seed(seed), then np.random.choice(..., replace=False, p=...)",
+     "why": "plan/exercises/week6/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "split returns train, validation and the rest as test, in order",
+     "why": "plan/exercises/week6/day1.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week6/day2_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "SYSTEM_PROMPT asks for Title, Category, Era, Condition and Description, and no prices",
+     "why": "plan/exercises/week6/day2.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "SYSTEM_PROMPT asks for Title, Category, Era, Condition and Description, and no prices",
+     "why": "plan/exercises/week6/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "rewrite sends SYSTEM_PROMPT as the system message, then the listing as the user message",
+     "why": "plan/exercises/week6/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "rewrite calls groq/openai/gpt-oss-20b with reasoning_effort=\"low\", or the model given",
+     "why": "plan/exercises/week6/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "rewrite returns the reply text and the cost from response._hidden_params",
+     "why": "plan/exercises/week6/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "request_line is one JSON line: custom_id as text, POST, /v1/chat/completions, a body",
+     "why": "plan/exercises/week6/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "request_line's body has the model (default openai/gpt-oss-20b), both messages, low effort",
+     "why": "plan/exercises/week6/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "submit_batch uploads the file for \"batch\", then starts a 24h batch on the upload's id",
+     "why": "plan/exercises/week6/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "collect returns None until the batch completes, then saves it and maps ids to replies",
+     "why": "plan/exercises/week6/day2.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week6/day3_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "make_constant_pricer's pricer returns the average training price, ignoring the item",
+     "why": "plan/exercises/week6/day3.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "make_constant_pricer's pricer returns the average training price, ignoring the item",
+     "why": "plan/exercises/week6/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "features gives year, year_unknown, signed and text_length, in that order",
+     "why": "plan/exercises/week6/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "features writes a missing year as 0 and flags it with year_unknown = 1",
+     "why": "plan/exercises/week6/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "fit_feature_pricer fits once, on one row of feature values per listing and the prices",
+     "why": "plan/exercises/week6/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "fit_feature_pricer's pricer predicts from a one-row table and returns that number",
+     "why": "plan/exercises/week6/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "fit_text_pricer fits the vectorizer on the training summaries, then the model on prices",
+     "why": "plan/exercises/week6/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "fit_text_pricer's pricer calls transform([summary]), never refits, and uses predict()[0]",
+     "why": "plan/exercises/week6/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "fit_text_pricer's pricer never returns a price below 0",
+     "why": "plan/exercises/week6/day3.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week6/day4_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "train_epoch sets train mode once, then per batch: zero_grad, model, loss, backward, step",
+     "why": "plan/exercises/week6/day4.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "train_epoch sets train mode once, then per batch: zero_grad, model, loss, backward, step",
+     "why": "plan/exercises/week6/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "train_epoch returns the last batch's loss as a number, from its .item()",
+     "why": "plan/exercises/week6/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "messages_for sends one user message that asks for the price and ends with the summary",
+     "why": "plan/exercises/week6/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "price_with makes one completion call with messages_for(listing) and openai/gpt-4.1-nano",
+     "why": "plan/exercises/week6/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "price_with passes the model it is given and options such as reasoning_effort and seed",
+     "why": "plan/exercises/week6/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "price_with returns the reply text from response.choices[0].message.content",
+     "why": "plan/exercises/week6/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_pricer makes no call itself; its pricer makes one call per listing",
+     "why": "plan/exercises/week6/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_pricer's pricer passes its model and options, openai/gpt-4.1-nano by default",
+     "why": "plan/exercises/week6/day4.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week6/day5_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "messages_for gives a user prompt ending with the summary, then the price as the assistant",
+     "why": "plan/exercises/week6/day5.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "messages_for gives a user prompt ending with the summary, then the price as the assistant",
+     "why": "plan/exercises/week6/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "messages_for writes the price with a $ and two decimals, such as $1234.50",
+     "why": "plan/exercises/week6/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_jsonl writes one {\"messages\": ...} JSON object per line, with no new line at the end",
+     "why": "plan/exercises/week6/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "start_fine_tune uploads the two files with purpose \"fine-tune\", holding their texts",
+     "why": "plan/exercises/week6/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "start_fine_tune starts the job on those file ids with seed 42, 1 epoch and batch size 1",
+     "why": "plan/exercises/week6/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "start_fine_tune uses gpt-4.1-nano-2025-04-14 or the model given, and returns the job id",
+     "why": "plan/exercises/week6/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "fine_tuned_pricer asks the job's fine-tuned model with the user message only, max_tokens=7",
+     "why": "plan/exercises/week6/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "fine_tuned_pricer returns the reply text, and raises ValueError until the job succeeds",
+     "why": "plan/exercises/week6/day5.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week7/day1_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "quant_settings(4) is the lesson's 4-bit config: NF4, double quantization, bfloat16",
+     "why": "plan/exercises/week7/day1.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "quant_settings(4) is the lesson's 4-bit config: NF4, double quantization, bfloat16",
+     "why": "plan/exercises/week7/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "quant_settings(8) is {\"load_in_8bit\": True}; other bit counts raise ValueError",
+     "why": "plan/exercises/week7/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_base with bits 4 or 8 passes BitsAndBytesConfig(**quant_settings(bits)) when loading",
+     "why": "plan/exercises/week7/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_base loads Llama 3.2 3B by default, with device_map \"auto\", and returns the model",
+     "why": "plan/exercises/week7/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_base with bits=None loads full precision: no quantization config",
+     "why": "plan/exercises/week7/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "attach_adapter calls PeftModel.from_pretrained(base_model, adapter_id) and returns it",
+     "why": "plan/exercises/week7/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "attach_adapter reports the MB the adapter added, read before and after attaching",
+     "why": "plan/exercises/week7/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "lora_size counts r \u00d7 (d_in + d_out) per targeted module, times layers, at 4 bytes each",
+     "why": "plan/exercises/week7/day1.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week7/day2_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "pick_cutoff returns the smallest multiple of step that cuts at most max_share",
+     "why": "plan/exercises/week7/day2.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "pick_cutoff returns the smallest multiple of step that cuts at most max_share",
+     "why": "plan/exercises/week7/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "pick_cutoff cuts only counts over the cutoff, and raises ValueError for no counts",
+     "why": "plan/exercises/week7/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_for_inference loads the tokenizer by name, padding with its eos token on the right",
+     "why": "plan/exercises/week7/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_for_inference loads the model with device_map \"auto\" and the quant config given",
+     "why": "plan/exercises/week7/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_for_inference sets model.generation_config.pad_token_id to the tokenizer's",
+     "why": "plan/exercises/week7/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "predict tokenizes the prompt to \"pt\" tensors, moved to the device (\"cuda\" by default)",
+     "why": "plan/exercises/week7/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "predict calls generate(**inputs) with max_new_tokens=8, or the number given",
+     "why": "plan/exercises/week7/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "predict returns only the new tokens, decoded, without the prompt",
+     "why": "plan/exercises/week7/day2.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week7/day3 and 4_ipynb": {
+   "pass": 0,
+   "total": 9,
+   "fail": [
+    {
+     "what": "lora_settings(lite=True): r 32, alpha 64, dropout 0.1, the four attention modules",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "lora_settings(lite=True): r 32, alpha 64, dropout 0.1, the four attention modules",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "lora_settings(lite=False): r 256, alpha 512, attention and MLP; bias \"none\", CAUSAL_LM",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "training_settings: lite is 1 epoch at batch 32, full is 3 epochs at batch 256",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "training_settings: lr 1e-4, cosine, warmup_ratio 0.01, paged_adamw_32bit, max_length 128",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "training_settings uses bf16 on compute capability 8 or above, fp16 below",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "training_settings saves, evaluates and pushes every save_steps to a private hub repo",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "training_settings reports to \"wandb\", or \"none\" if told not to; keys are SFTConfig's",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_trainer gives SFTTrainer the model, train, the first val_size of val, both configs",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "train_and_push trains, then pushes trainer.model to the hub as a private repo",
+     "why": "plan/exercises/week7/day3_and_4.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week7/day5_ipynb": {
+   "pass": 0,
+   "total": 7,
+   "fail": [
+    {
+     "what": "load_finetuned loads the base on the GPU in the quant config, Llama 3.2 3B by default",
+     "why": "plan/exercises/week7/day5.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "load_finetuned loads the base on the GPU in the quant config, Llama 3.2 3B by default",
+     "why": "plan/exercises/week7/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_finetuned puts the adapter on that base model with PeftModel.from_pretrained",
+     "why": "plan/exercises/week7/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "load_finetuned passes revision= only when one is given",
+     "why": "plan/exercises/week7/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "make_predictor returns a function of one datapoint, and calls no model until it runs",
+     "why": "plan/exercises/week7/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "the predictor tokenizes datapoint[\"prompt\"], moves it to the device, generates 8 tokens",
+     "why": "plan/exercises/week7/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "the predictor returns only the generated text, without the prompt",
+     "why": "plan/exercises/week7/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "score calls set_seed(42), then evaluate(predictor, data, size=200), and returns its result",
+     "why": "plan/exercises/week7/day5.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week8/day1_ipynb": {
+   "pass": 0,
+   "total": 7,
+   "fail": [
+    {
+     "what": "run_remotely calls function.remote with the arguments inside app.run, and returns it",
+     "why": "plan/exercises/week8/day1.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "run_remotely calls function.remote with the arguments inside app.run, and returns it",
+     "why": "plan/exercises/week8/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "run_remotely keeps Modal's output on during the run, and never calls .local",
+     "why": "plan/exercises/week8/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "service_options builds the image with debian_slim().pip_install, incl. torch and peft",
+     "why": "plan/exercises/week8/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "service_options asks for huggingface-secret, gpu T4, timeout 1800, min_containers=warm",
+     "why": "plan/exercises/week8/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "remote_prices looks up the class once, makes one instance, and passes names through",
+     "why": "plan/exercises/week8/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "remote_prices calls price.remote once per description, in order, and returns floats",
+     "why": "plan/exercises/week8/day1.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "keep_warm calls update_autoscaler(scaledown_window=minutes * 60) on the instance",
+     "why": "plan/exercises/week8/day1.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week8/day2_ipynb": {
+   "pass": 0,
+   "total": 9,
+   "fail": [
+    {
+     "what": "add_sales encodes the descriptions in one call and stores texts, vectors and prices",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "add_sales encodes the descriptions in one call and stores texts, vectors and prices",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "add_sales numbers ids on from collection.count(), so a second call adds more",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "find_similars makes one query with the encoded description, n_results=5 unless given",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "find_similars returns the nearest sales first, as description/category/price dicts",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "messages_for gives a system message about the price, then the listing and each $X.XX",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "estimate_price makes one completion call: your messages, reasoning_effort none, seed 42",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "estimate_price uses gpt-5.1 unless given another model",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "estimate_price reads '$1,299.99' as 1299.99, and 0.0 when the reply has no number",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "ensemble_price blends estimate_price and pricer.price.remote, 0.8 and 0.2 unless given",
+     "why": "plan/exercises/week8/day2.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week8/day3_ipynb": {
+   "pass": 0,
+   "total": 8,
+   "fail": [
+    {
+     "what": "Listing has summary, price, url and wrestler: typed, required, each described",
+     "why": "plan/exercises/week8/day3.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "Listing has summary, price, url and wrestler: typed, required, each described",
+     "why": "plan/exercises/week8/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "Shortlist holds a required, described list of Listing objects in listings",
+     "why": "plan/exercises/week8/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "messages_for: system then user; the user message has k and every listing, in order",
+     "why": "plan/exercises/week8/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "pick_listings makes one chat.completions.parse call with Shortlist and minimal effort",
+     "why": "plan/exercises/week8/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "pick_listings uses gpt-5-mini unless given another model, and passes k through",
+     "why": "plan/exercises/week8/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "pick_listings returns the parsed Shortlist without the listings priced at 0 or less",
+     "why": "plan/exercises/week8/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "push posts user, token and message as form data to Pushover's messages URL",
+     "why": "plan/exercises/week8/day3.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "push raises ValueError and posts nothing when a Pushover key is missing",
+     "why": "plan/exercises/week8/day3.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week8/day4_ipynb": {
+   "pass": 0,
+   "total": 7,
+   "fail": [
+    {
+     "what": "TOOLS holds three function tools: search_listings, estimate_value and alert_user",
+     "why": "plan/exercises/week8/day4.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "TOOLS holds three function tools: search_listings, estimate_value and alert_user",
+     "why": "plan/exercises/week8/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "each tool takes an object of typed, described, required properties and nothing else",
+     "why": "plan/exercises/week8/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "handle_tool_calls calls each tool with its JSON arguments and answers by tool_call_id",
+     "why": "plan/exercises/week8/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "handle_tool_calls answers a call to an unknown tool with an error instead of raising",
+     "why": "plan/exercises/week8/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "hunt sends system then your request, TOOLS on every call, and gpt-5.1 unless given",
+     "why": "plan/exercises/week8/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "hunt loops while finish_reason is tool_calls, sending the message then the tool replies",
+     "why": "plan/exercises/week8/day4.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "hunt returns the text of the reply that ends the loop",
+     "why": "plan/exercises/week8/day4.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
+  "week8/day5_ipynb": {
+   "pass": 0,
+   "total": 9,
+   "fail": [
+    {
+     "what": "table_rows gives one row per opportunity: description, price, estimate, discount, url",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet"
+    }
+   ],
+   "more": 0,
+   "items": [
+    {
+     "what": "table_rows gives one row per opportunity: description, price, estimate, discount, url",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "table_rows writes the three amounts as text with a dollar sign and two decimals",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "select_alert alerts the opportunity in the clicked row, selected.index[0], once",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "select_alert returns a short status text that names the alerted item",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "refresh first yields the remembered deals and their rows, before running anything",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "refresh then runs the framework once and yields its opportunities and their rows",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "build_board returns a Blocks with a Markdown title in a Row, a State and a 5-header table",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "build_board runs refresh on load and on a 300-second Timer, into the state and table",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet",
+     "state": "wait"
+    },
+    {
+     "what": "build_board's table.select alerts the clicked row from the state into the status",
+     "why": "plan/exercises/week8/day5.ipynb is not started yet",
+     "state": "wait"
+    }
+   ]
+  },
   "b0_setup": {
    "pass": 1,
    "total": 1,
@@ -198,17 +2196,17 @@
      "state": "wait"
     },
     {
-     "what": "ask returns the model's reply",
+     "what": "ask sends build_messages(question, document) in one Chat Completions call",
      "why": "plan/block1/ask.py is not in your fork yet",
      "state": "wait"
     },
     {
-     "what": "ask trims blank space around the reply",
+     "what": "ask uses gpt-4.1-mini unless it is given another model",
      "why": "plan/block1/ask.py is not in your fork yet",
      "state": "wait"
     },
     {
-     "what": "ask calls the model exactly once, with the messages from build_messages",
+     "what": "ask returns the reply's text, without whitespace around it",
      "why": "plan/block1/ask.py is not in your fork yet",
      "state": "wait"
     }
@@ -216,7 +2214,7 @@
   },
   "b2_build": {
    "pass": 0,
-   "total": 7,
+   "total": 8,
    "fail": [
     {
      "what": "",
@@ -232,6 +2230,11 @@
     },
     {
      "what": "list_documents returns the sorted names of the .md and .txt files in a folder",
+     "why": "plan/block2/chat.py is not in your fork yet",
+     "state": "wait"
+    },
+    {
+     "what": "TOOLS describes list_documents to the model, with a required folder parameter",
      "why": "plan/block2/chat.py is not in your fork yet",
      "state": "wait"
     },
@@ -960,6 +2963,6 @@
  },
  "documents": 76,
  "documents_in": "week5/knowledge-base",
- "tests_isolated": false,
- "checker": "4"
+ "tests_isolated": true,
+ "checker": "7"
 }
