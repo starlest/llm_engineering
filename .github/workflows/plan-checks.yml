@@ -1,0 +1,46 @@
+# Runs plan/check.py on every push and publishes plan/status.json for the AI Engineering Tracker.
+name: Plan checks
+
+on:
+  push:
+    branches-ignore: [plan-status]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: plan-checks
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Get the fork
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install the packages the tests need
+        run: |
+          python3 -m venv "$RUNNER_TEMP/venv"
+          "$RUNNER_TEMP/venv/bin/pip" install --quiet pydantic openai python-dotenv numpy beautifulsoup4 tiktoken
+
+      - name: Run the checks
+        run: |
+          "$RUNNER_TEMP/venv/bin/python" plan/check.py --all | tee "$RUNNER_TEMP/report.txt"
+          { echo '```'; cat "$RUNNER_TEMP/report.txt"; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish the result on the plan-status branch
+        env:
+          TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/out/plan"
+          cd "$RUNNER_TEMP/out"
+          cp "$GITHUB_WORKSPACE/plan/status.json" plan/status.json
+          git init --quiet --initial-branch=plan-status
+          git add plan/status.json
+          git -c user.name="plan-checks" -c user.email="plan-checks@users.noreply.github.com" commit --quiet -m "Checks for ${GITHUB_SHA::7}"
+          git push --quiet --force "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" plan-status
