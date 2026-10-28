@@ -14,7 +14,8 @@ It runs the tests on your exercise notebooks and on python_check.py, ask.py and 
 client and libraries, so no API call is made and nothing is spent, and it checks your other files under plan/. It prints what passed and what
 did not, and writes plan/status.json. Commit that file with your work: the tracker page reads it from GitHub.
 
-The exercise notebooks use this file too: their first cell loads their checks from it.
+The exercise notebooks use this file too: their first cell loads their checks from it. In Colab, that cell also
+gets "Try it for real" ready: your API keys from Colab's secrets, your fork's files and the packages it needs.
 
 Claude wrote this file for the plan. Its parts are unpacked into a temporary folder on each run.
 To update it, run git pull, or replace the whole file with a new copy from the tracker page.
@@ -25,7 +26,7 @@ import subprocess
 import sys
 import tempfile
 
-VERSION = "7"
+VERSION = "7.1"
 
 
 def main():
@@ -60,8 +61,17 @@ _PARTS = {}
 
 def exercise(key, names):
     """For an exercise notebook's first cell: check = exercise("week1/day1", globals()). Then check("<part>") runs
-    the checks for one part on what the notebook has run so far, and check() runs them all. No model is called."""
-    return _part("notebook.py").Checks(key, names, FILES)
+    the checks for one part on what the notebook has run so far, and check() runs them all. No model is called.
+    In Colab it also gets the exercise's Try it for real ready (see colab.py)."""
+    checks = _part("notebook.py").Checks(key, names, FILES)
+    colab = _part("colab.py")
+    if colab.in_colab():
+        import json
+        try:
+            colab.prepare(key, names, json.loads(FILES["exercises.json"])[key].get("colab") or {})
+        except Exception as e:  # noqa: BLE001 - the checks work without it
+            print(f"Getting Try it for real ready in Colab stopped ({type(e).__name__}: {e}). The checks work as usual.")
+    return checks
 
 
 def functions_of(key):
@@ -981,7 +991,9 @@ cells, and leaves out everything else: calls, experiments and the real runs. So 
 the cells you write to try things out never get in its way.
 """
 import ast
+import contextlib
 import json
+import os
 import re
 import sys
 import threading
@@ -1227,6 +1239,31 @@ def within(seconds, fn, *args):
     return box.get("value")
 
 
+# API keys and tokens the course's code reads. While a check runs they are out of reach: the stand-ins need none, and
+# a part that made its own client would fail instead of spending. Colab's own variables are left alone.
+KEY_NAMES = {"HF_TOKEN", "HUGGING_FACE_HUB_TOKEN", "MODAL_TOKEN_ID", "MODAL_TOKEN_SECRET", "PUSHOVER_USER",
+             "PUSHOVER_TOKEN", "TWILIO_ACCOUNT_SID", "TWILIO_AUTH_TOKEN"}
+
+
+def is_key_name(name):
+    return (name.endswith("_API_KEY") or name in KEY_NAMES) and not name.startswith("COLAB_")
+
+
+@contextlib.contextmanager
+def hidden_keys():
+    """Your keys out of reach, and a placeholder OpenAI key, while the checks run; everything back afterwards."""
+    saved = {name: value for name, value in os.environ.items() if is_key_name(name)}
+    for name in saved:
+        os.environ.pop(name, None)
+    os.environ["OPENAI_API_KEY"] = "not-a-real-key"
+    try:
+        yield
+    finally:
+        for name in [n for n in os.environ if is_key_name(n)]:
+            os.environ.pop(name, None)
+        os.environ.update(saved)
+
+
 class Names:
     """A notebook's names as attributes, the way the checks read a module."""
 
@@ -1263,19 +1300,20 @@ class Checks:
             return
         chosen = [(t, fn) for t, fn in self.tests if name is None or self.owner.get(t) == name]
         results = []
-        for t, fn in chosen:
-            what = (fn.__doc__ or t).strip().split("\n")[0]
-            try:
-                within(10, fn, Names(self.names))
-                results.append((what, ""))
-            except Timeout:
-                results.append((what, "it took longer than 10 seconds"))
-            except NotImplementedError as e:
-                results.append((what, str(e) or "not written yet"))
-            except AssertionError as e:
-                results.append((what, str(e) or "the result was not what the exercise expects"))
-            except Exception as e:  # noqa: BLE001 - say what the part raised
-                results.append((what, f"{type(e).__name__}: {e}"))
+        with hidden_keys():
+            for t, fn in chosen:
+                what = (fn.__doc__ or t).strip().split("\n")[0]
+                try:
+                    within(10, fn, Names(self.names))
+                    results.append((what, ""))
+                except Timeout:
+                    results.append((what, "it took longer than 10 seconds"))
+                except NotImplementedError as e:
+                    results.append((what, str(e) or "not written yet"))
+                except AssertionError as e:
+                    results.append((what, str(e) or "the result was not what the exercise expects"))
+                except Exception as e:  # noqa: BLE001 - say what the part raised
+                    results.append((what, f"{type(e).__name__}: {e}"))
         passed, total = sum(1 for _, why in results if not why), len(results)
         if total == 1:
             head = "its check passes" if passed else "its check does not pass yet"
@@ -1288,6 +1326,203 @@ class Checks:
                 print("      " + " ".join(why.split())[:600])
         if name is None and passed == len(results):
             print("\nSave the notebook, then run the checker and push. The tracker marks this lesson done.")
+'''
+FILES['colab.py'] = r'''"""Colab: what an exercise's "Try it for real" needs when its notebook runs in Google Colab.
+
+The notebook's first cell calls check.exercise(), which calls prepare() in Colab only. prepare() gets ready what the
+exercise's Try section uses, as its entry in exercises.json lists it:
+
+- keys: copied from your Colab secrets (the key icon in Colab's left bar) into os.environ, where load_dotenv() leaves
+  them alone and OpenAI(), make_clients(os.environ) and the course's code look for them. Only their names are printed.
+- your fork: its files, such as week1/scraper.py, checked out in ROOT, so that ROOT / "week1" works as in your
+  codespace. The course's community-contributions folders are left out, which keeps it to about 17 MB.
+- packages: what the Try section imports that Colab lacks, installed with pip.
+- Ollama: start_ollama() in the notebook, for the steps that use a local model through Ollama.
+
+The checks never see your keys: notebook.hidden_keys() puts them out of reach while a check runs.
+"""
+import importlib
+import importlib.util
+import os
+import pathlib
+import shutil
+import subprocess
+import sys
+import time
+import urllib.request
+
+REPO = "https://github.com/starlest/llm_engineering"
+# a sparse checkout: everything but the community folders, which are most of the course's size
+SPARSE = "/*\n!community-contributions/\n!community_contributions/\n!/extras/community/\n"
+OLLAMA = "http://127.0.0.1:11434"
+NAMES = {"OPENAI_API_KEY": "OpenAI", "ANTHROPIC_API_KEY": "Claude", "GOOGLE_API_KEY": "Gemini",
+         "GROQ_API_KEY": "Groq", "GROK_API_KEY": "Grok", "OPENROUTER_API_KEY": "OpenRouter",
+         "DEEPSEEK_API_KEY": "DeepSeek", "HF_TOKEN": "Hugging Face", "MODAL_TOKEN_ID": "Modal",
+         "MODAL_TOKEN_SECRET": "Modal", "PUSHOVER_USER": "Pushover", "PUSHOVER_TOKEN": "Pushover"}
+
+
+def in_colab():
+    return "google.colab" in sys.modules or "COLAB_RELEASE_TAG" in os.environ
+
+
+def load_keys(names):
+    """Copy these secrets from Colab into os.environ. Returns the names loaded, missing, and refused."""
+    loaded, missing, refused = [], [], []
+    try:
+        from google.colab import userdata
+    except ImportError:
+        return loaded, list(names), refused
+    for name in names:
+        if os.environ.get(name, "").strip():
+            loaded.append(name)  # already here, from an earlier run of the first cell
+            continue
+        try:
+            value = userdata.get(name)  # the first time, Colab asks you to let this notebook read it
+        except userdata.NotebookAccessError:
+            refused.append(name)
+            continue
+        except Exception:  # noqa: BLE001 - not in your secrets, or Colab did not answer
+            missing.append(name)
+            continue
+        value = (value or "").strip()
+        if value:
+            os.environ[name] = value
+            loaded.append(name)
+        else:
+            missing.append(name)
+    return loaded, missing, refused
+
+
+def get_fork(root):
+    """Check out your fork's main branch in root, without the community folders: a few seconds. Returns "" or what
+    went wrong."""
+    root = pathlib.Path(root)
+    root.mkdir(parents=True, exist_ok=True)
+
+    def git(*args, timeout=300):
+        return subprocess.run(["git", "-C", str(root), *args], capture_output=True, text=True, timeout=timeout)
+
+    if not (root / ".git").is_dir():
+        for args in (("init", "-q"), ("remote", "add", "origin", REPO), ("config", "core.sparseCheckout", "true")):
+            done = git(*args)
+            if done.returncode:
+                return f"git {args[0]} failed: {done.stderr.strip()[:200]}"
+        (root / ".git" / "info").mkdir(parents=True, exist_ok=True)
+        (root / ".git" / "info" / "sparse-checkout").write_text(SPARSE, encoding="utf-8")
+    done = git("fetch", "-q", "--depth", "1", "--filter=blob:none", "origin", "main")
+    if done.returncode:
+        return f"could not fetch it from GitHub: {done.stderr.strip()[:200]}"
+    done = git("checkout", "-q", "-f", "FETCH_HEAD")
+    if done.returncode:
+        return f"could not check it out: {done.stderr.strip()[:200]}"
+    return ""
+
+
+def install(packages):
+    """pip-install the [module, pip name] pairs whose module is missing. Returns (installed, error)."""
+    missing = [pip for module, pip in packages if importlib.util.find_spec(module) is None]
+    if not missing:
+        return [], ""
+    print("Installing " + ", ".join(missing) + " for Try it for real…", flush=True)
+    done = subprocess.run([sys.executable, "-m", "pip", "install", "-q", *missing], capture_output=True, text=True)
+    importlib.invalidate_caches()
+    if done.returncode:
+        last = [line for line in done.stderr.strip().splitlines() if line.strip()][-1:] or ["no message"]
+        return [], f"pip could not install {', '.join(missing)}: {last[0][:200]}"
+    return missing, ""
+
+
+def ollama_up():
+    try:
+        with urllib.request.urlopen(OLLAMA + "/api/version", timeout=2) as reply:
+            return reply.status == 200
+    except Exception:  # noqa: BLE001 - not running yet
+        return False
+
+
+def make_start_ollama(default_models):
+    def start_ollama(*models):
+        """Install Ollama on this Colab machine, start it and pull the models: what `ollama serve` and `ollama pull`
+        do in your codespace. Run it once per Colab session, before the steps that use Ollama. The first time it
+        downloads Ollama and each model (llama3.2 is about 2 GB), so allow a few minutes. A GPU runtime (Runtime >
+        Change runtime type) answers much faster than the CPU."""
+        models = list(models) or list(default_models)
+        if not shutil.which("ollama"):
+            if not shutil.which("zstd"):  # Ollama's installer needs it to unpack
+                subprocess.run("apt-get update -qq && apt-get install -y -qq zstd", shell=True, capture_output=True)
+            print("Installing Ollama…", flush=True)
+            done = subprocess.run("curl -fsSL https://ollama.com/install.sh | sh", shell=True, capture_output=True,
+                                  text=True)
+            if not shutil.which("ollama"):
+                tail = (done.stderr or done.stdout).strip().splitlines()[-1:] or ["no message"]
+                print("Ollama did not install: " + tail[0][:300])
+                return False
+        if not ollama_up():
+            log = open("/content/ollama.log", "ab")
+            subprocess.Popen(["ollama", "serve"], stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+            for _ in range(60):
+                if ollama_up():
+                    break
+                time.sleep(0.5)
+            else:
+                print("Ollama did not start: see /content/ollama.log")
+                return False
+        for model in models:
+            print(f"Pulling {model}…", flush=True)
+            done = subprocess.run(["ollama", "pull", model], capture_output=True, text=True)
+            if done.returncode:
+                tail = (done.stderr or done.stdout).strip().splitlines()[-1:] or ["no message"]
+                print(f"  {model} did not download: {tail[0][:300]}")
+                return False
+        print(f"Ollama is running at http://localhost:11434 with {', '.join(models)}. "
+              "The Try steps that use Ollama now work as in your codespace.")
+        return True
+    return start_ollama
+
+
+def described(names):
+    return ", ".join(f"{n} ({NAMES[n]})" if n in NAMES else n for n in names)
+
+
+def prepare(key, names, needs):
+    """Get this exercise's Try it for real ready in Colab, and say what is ready and what is missing."""
+    if not needs:
+        return
+    lines = []
+    required, optional = list(needs.get("keys", [])), list(needs.get("optional_keys", []))
+    if required or optional:
+        loaded, missing, refused = load_keys(required + optional)
+        if loaded:
+            lines.append("Keys from your Colab secrets: " + ", ".join(loaded) + ".")
+        need = [n for n in missing if n in required]
+        if need:
+            lines.append(f"Not in your Colab secrets: {described(need)}. Add {'it' if len(need) == 1 else 'them'} with "
+                         "the key icon in the left bar, using exactly that name, then run this cell again.")
+        could = [n for n in missing if n in optional]
+        if could:
+            lines.append("Optional, not in your secrets: " + described(could) + ". The Try steps skip what needs them.")
+        if refused:
+            lines.append("This notebook may not read " + ", ".join(refused) + ": in the key panel on the left, turn on "
+                         "Notebook access for it, then run this cell again.")
+    if needs.get("fork"):
+        root = pathlib.Path(names.get("ROOT") or "/content/fork")
+        problem = get_fork(root)
+        lines.append(f"Your fork's files are in {root} (ROOT), as in your codespace." if not problem
+                     else f"Your fork's files are not here: {problem}")
+    if needs.get("pip"):
+        installed, problem = install(needs["pip"])
+        if problem:
+            lines.append(problem)
+        elif installed:
+            lines.append("Installed " + ", ".join(installed) + ".")
+    if needs.get("ollama"):
+        names["start_ollama"] = make_start_ollama(needs["ollama"])
+        lines.append("For the steps that use Ollama, run start_ollama() in a cell first: it installs Ollama here and "
+                     "pulls " + " and ".join(needs["ollama"]) + " (a few minutes the first time).")
+    if lines:
+        print("Try it for real in Colab:")
+        for line in lines:
+            print("  " + line)
 '''
 FILES['fakes.py'] = r'''"""Stand-ins for the clients and libraries the lessons use, shaped like the real ones, for the exercise checks.
 
@@ -9707,7 +9942,18 @@ FILES['exercises.json'] = r'''{
    "49e18537f87a4a3c8f13f8c8cec5c7648cdcafa9",
    "b3f80574afb791470cc9967ba0a61fc191dc2f1d",
    "dbb20e1169e65d96364d7d349cedec23d0cdcb73"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [],
+   "ollama": [
+    "llama3.2"
+   ],
+   "fork": false
+  }
  },
  "week1/day2": {
   "lesson": "week1/day2.ipynb",
@@ -9748,7 +9994,30 @@ FILES['exercises.json'] = r'''{
    "8f4645ae9d3b5d94668ea7897719aabb31494c67",
    "90d7141eb440cd8fa5da51e8b9f165c4d0e9de68",
    "d60f02e89e8eb00f93b716fcfb3c55aadb5dd44b"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "GOOGLE_API_KEY"
+   ],
+   "pip": [
+    [
+     "bs4",
+     "beautifulsoup4"
+    ],
+    [
+     "requests",
+     "requests"
+    ]
+   ],
+   "ollama": [
+    "llama3.2",
+    "deepseek-r1:1.5b"
+   ],
+   "fork": true
+  }
  },
  "week1/day4": {
   "lesson": "week1/day4.ipynb",
@@ -9788,7 +10057,16 @@ FILES['exercises.json'] = r'''{
    "5c17ace6d00060d35a8b7abea0b69c8139016ad6",
    "eb84d6c9f6ac93864d13d52ebc2b916b553eee54",
    "f3d5b79cd3026265f18d57d388ec6f7c263fffc2"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [],
+   "ollama": [],
+   "fork": false
+  }
  },
  "week1/day5": {
   "lesson": "week1/day5.ipynb",
@@ -9828,7 +10106,25 @@ FILES['exercises.json'] = r'''{
    "35d18b54f91827e3229342e47f0a18638bb3b5a8",
    "a109158706ae7aac124229814db16ab8f92062b7",
    "bce403d737f0b93f1d494b313512bb7204884b6a"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "bs4",
+     "beautifulsoup4"
+    ],
+    [
+     "requests",
+     "requests"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week1/week1_exercise": {
   "lesson": "week1/week1 EXERCISE.ipynb",
@@ -9869,7 +10165,18 @@ FILES['exercises.json'] = r'''{
    "76417c667e335d6ceb9e55cb3d79f225b1d92ebe",
    "8882f44165bca0126176aeb11978649c5e184b4d",
    "92630fd61777ef8398391824e93d0ce9a57811af"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [],
+   "ollama": [
+    "llama3.2"
+   ],
+   "fork": false
+  }
  },
  "week2/day1": {
   "lesson": "week2/day1.ipynb",
@@ -9914,7 +10221,27 @@ FILES['exercises.json'] = r'''{
    "bda69dcaf81bfcecc8ed728dcb5ec8350dfd9e85",
    "ed44d1757f2145731eb04ec366d5b02adaa0f9b6",
    "f0cc12f00e22dd0966c0e402ebcb084d04974511"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "ANTHROPIC_API_KEY",
+    "GOOGLE_API_KEY",
+    "GROQ_API_KEY"
+   ],
+   "pip": [
+    [
+     "litellm",
+     "litellm"
+    ]
+   ],
+   "ollama": [
+    "llama3.2"
+   ],
+   "fork": false
+  }
  },
  "week2/day2": {
   "lesson": "week2/day2.ipynb",
@@ -9957,7 +10284,33 @@ FILES['exercises.json'] = r'''{
    "3f234b8be93c6e3fd6547bf5dcfdffda529b14cb",
    "76417c667e335d6ceb9e55cb3d79f225b1d92ebe",
    "dde11b4684aa2cfcabf6333761b5bfdcbde5caff"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "ANTHROPIC_API_KEY"
+   ],
+   "pip": [
+    [
+     "bs4",
+     "beautifulsoup4"
+    ],
+    [
+     "gradio",
+     "gradio"
+    ],
+    [
+     "requests",
+     "requests"
+    ]
+   ],
+   "ollama": [
+    "llama3.2"
+   ],
+   "fork": true
+  }
  },
  "week2/day3": {
   "lesson": "week2/day3.ipynb",
@@ -10001,7 +10354,23 @@ FILES['exercises.json'] = r'''{
    "27f032dd3d7fc9501f174ff27ab8d4bed65ffdd0",
    "52281f9fda8c059592678860ab22f57bf8ff41ac",
    "9d572a62fd3f315634170025117233d671e9c1b4"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "gradio",
+     "gradio"
+    ]
+   ],
+   "ollama": [
+    "llama3.2"
+   ],
+   "fork": false
+  }
  },
  "week2/day4": {
   "lesson": "week2/day4.ipynb",
@@ -10044,7 +10413,23 @@ FILES['exercises.json'] = r'''{
    "52281f9fda8c059592678860ab22f57bf8ff41ac",
    "aa7d2ab1982f934f453e97292623b5af0fe2cb52",
    "dcd01b587355f9e3fade3d4545fb89532842ccf8"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "gradio",
+     "gradio"
+    ]
+   ],
+   "ollama": [
+    "llama3.2"
+   ],
+   "fork": false
+  }
  },
  "week2/day5": {
   "lesson": "week2/day5.ipynb",
@@ -10086,7 +10471,25 @@ FILES['exercises.json'] = r'''{
    "52281f9fda8c059592678860ab22f57bf8ff41ac",
    "52aa5574a14fff057467c5587d371ff4a3da2ffe",
    "7cedcaec5e0e6bf44cb764a456e5052c3d13c751"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "PIL",
+     "pillow"
+    ],
+    [
+     "gradio",
+     "gradio"
+    ]
+   ],
+   "ollama": [],
+   "fork": false
+  }
  },
  "week2/week2_exercise": {
   "lesson": "week2/week2 EXERCISE.ipynb",
@@ -10127,7 +10530,23 @@ FILES['exercises.json'] = r'''{
    "495e3dcb2d1491a39bb9fe39db6babaf28fb068c",
    "ad9224370984d45566892410750c2a1d2603ddb3",
    "bede6209f8661cb2b74ea1cf235d1e28b8e76001"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "ANTHROPIC_API_KEY"
+   ],
+   "pip": [
+    [
+     "gradio",
+     "gradio"
+    ]
+   ],
+   "ollama": [],
+   "fork": false
+  }
  },
  "week3/day1": {
   "lesson": "week3/day1.ipynb",
@@ -10169,7 +10588,8 @@ FILES['exercises.json'] = r'''{
    "6ad57a9f7f8e8d72c6551a7cb95c1fffc016ea91",
    "8931b51430ddb78f9b3fcbffe53007c7e8371ed1",
    "96fdec9d5c12adf7b58083c03053f414fe1c5843"
-  ]
+  ],
+  "colab": {}
  },
  "week3/day2": {
   "lesson": "week3/day2.ipynb",
@@ -10209,7 +10629,8 @@ FILES['exercises.json'] = r'''{
    "4a84e96a49f6da721169cd92ef1822344a2c21b5",
    "946ea3063d77d0642ae671f44bd4d96d765726a9",
    "b8592ab533a478a0281ddb648e29d8c11cbd71ab"
-  ]
+  ],
+  "colab": {}
  },
  "week3/day3": {
   "lesson": "week3/day3.ipynb",
@@ -10246,7 +10667,25 @@ FILES['exercises.json'] = r'''{
    "67a6c61661d0e9fe192beb238175ebfdd4259053",
    "c3033f70806fd14ac9d5f4af2d6f394e46906ec0",
    "ed3202bc8ee13a8bdb0ec395ee152de874f934cd"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "HF_TOKEN"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "huggingface_hub",
+     "huggingface_hub"
+    ],
+    [
+     "transformers",
+     "transformers"
+    ]
+   ],
+   "ollama": [],
+   "fork": false
+  }
  },
  "week3/day4": {
   "lesson": "week3/day4.ipynb",
@@ -10286,7 +10725,8 @@ FILES['exercises.json'] = r'''{
    "11870b73b057a6b48d1cf1092a2daae07a66f1c9",
    "8d8400b3aafc727c198c5b4882d172abf9e7ab88",
    "d1e6514c698a65bd241401d05f45ffd942921b8a"
-  ]
+  ],
+  "colab": {}
  },
  "week3/day5": {
   "lesson": "week3/day5.ipynb",
@@ -10327,7 +10767,8 @@ FILES['exercises.json'] = r'''{
    "9d6864cd651559e97e9bab03cfdd05375b169501",
    "a0c8a745057b580f5719a62e41f0afd95a3f3f2c",
    "b9da233b2ca7e98e15aa2e5ac4257a7cecf96532"
-  ]
+  ],
+  "colab": {}
  },
  "week4/day3": {
   "lesson": "week4/day3.ipynb",
@@ -10368,7 +10809,20 @@ FILES['exercises.json'] = r'''{
    "9fbaeee95a45cdcd4408fcdf64cd8dea2998da55",
    "d28ab024c89416bd4f8d78f5e8bb77e6830ea332",
    "e2872c040e624cb61348b3d6065908a6c849c564"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "ANTHROPIC_API_KEY",
+    "GOOGLE_API_KEY",
+    "GROK_API_KEY"
+   ],
+   "pip": [],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week4/day4": {
   "lesson": "week4/day4.ipynb",
@@ -10407,7 +10861,26 @@ FILES['exercises.json'] = r'''{
    "2a90472ce8fdc20e005495685bb90add2f00d13e",
    "8bb815d6e35c5d699d2e2b7f2fa14b2c52ae7595",
    "ec43e902df1a83526805cc5ee25b6785cd9abba9"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "GROQ_API_KEY",
+    "OPENROUTER_API_KEY"
+   ],
+   "pip": [
+    [
+     "gradio",
+     "gradio"
+    ]
+   ],
+   "ollama": [
+    "qwen2.5-coder:1.5b"
+   ],
+   "fork": true
+  }
  },
  "week4/day5": {
   "lesson": "week4/day5.ipynb",
@@ -10444,7 +10917,23 @@ FILES['exercises.json'] = r'''{
    "a04eabba2dd6406bc84b57df2b8804ebd1e3dd54",
    "a6225d9d43243af0c3cfd0d2a356aee3345452f2",
    "f9696647d3e096f0272c2adb76b5df40cf733cae"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "GROQ_API_KEY"
+   ],
+   "pip": [
+    [
+     "gradio",
+     "gradio"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week5/day1": {
   "lesson": "week5/day1.ipynb",
@@ -10485,7 +10974,21 @@ FILES['exercises.json'] = r'''{
    "20561101878aa213681bb9c30ce33c9834c49f1d",
    "51f6c4206b14d734d3f4a7121ab411619d71edb2",
    "6a26a0d5d5cdca3cee90adf284b3951a26eabaf2"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "gradio",
+     "gradio"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week5/day2": {
   "lesson": "week5/day2.ipynb",
@@ -10525,7 +11028,49 @@ FILES['exercises.json'] = r'''{
    "1456eced762d3b8a6ad3233616f0ddce79b332b6",
    "e7351248f0d55de78eec41dddfb37f602d54d805",
    "fe863c006e429e96201264f36e64c4c17af6aa5c"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "langchain_chroma",
+     "langchain-chroma"
+    ],
+    [
+     "langchain_community",
+     "langchain-community"
+    ],
+    [
+     "langchain_huggingface",
+     "langchain-huggingface"
+    ],
+    [
+     "langchain_text_splitters",
+     "langchain-text-splitters"
+    ],
+    [
+     "numpy",
+     "numpy"
+    ],
+    [
+     "plotly",
+     "plotly"
+    ],
+    [
+     "sklearn",
+     "scikit-learn"
+    ],
+    [
+     "sentence_transformers",
+     "sentence-transformers"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week5/day3": {
   "lesson": "week5/day3.ipynb",
@@ -10564,7 +11109,37 @@ FILES['exercises.json'] = r'''{
    "07653e7ccf58dc9e072554fe0d1a6fb7469ea405",
    "34f00f7c6bade2183edcde0ed365295b12e0cda0",
    "b2f0fa5f1aef4bcbd3b91afbc2cb3f03e63fc4b3"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "gradio",
+     "gradio"
+    ],
+    [
+     "langchain_chroma",
+     "langchain-chroma"
+    ],
+    [
+     "langchain_huggingface",
+     "langchain-huggingface"
+    ],
+    [
+     "langchain_openai",
+     "langchain-openai"
+    ],
+    [
+     "sentence_transformers",
+     "sentence-transformers"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week5/day4": {
   "lesson": "week5/day4.ipynb",
@@ -10608,7 +11183,41 @@ FILES['exercises.json'] = r'''{
    "78fbfab65c0c2b208c853f694e4201f63de3122b",
    "904a89bdd073e74101d972fecb428bd71b40f9f5",
    "bec7d8f2174553b9de6d213d0ac2eba267a4aa47"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "langchain_chroma",
+     "langchain-chroma"
+    ],
+    [
+     "langchain_core",
+     "langchain-core"
+    ],
+    [
+     "langchain_huggingface",
+     "langchain-huggingface"
+    ],
+    [
+     "langchain_openai",
+     "langchain-openai"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "sentence_transformers",
+     "sentence-transformers"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week5/day5": {
   "lesson": "week5/day5.ipynb",
@@ -10652,7 +11261,29 @@ FILES['exercises.json'] = r'''{
    "22c6a4f4ce48038d571f0606d76396bbe9dcef7f",
    "bb363234cf65284063743b0c8e5ec2771e803d48",
    "c9dd1b8bc4f1a48b33a96582ffa528c7f96de16e"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "chromadb",
+     "chromadb"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "tqdm",
+     "tqdm"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week6/day1": {
   "lesson": "week6/day1.ipynb",
@@ -10690,7 +11321,61 @@ FILES['exercises.json'] = r'''{
    "1d1013ff0150008454e4c246e26685c83048dfbe",
    "9cbdead82d21527a307af9aee082a4a3938f801d",
    "d2d858d1633fae7e6b1735769db8971e1c8cf398"
-  ]
+  ],
+  "colab": {
+   "keys": [],
+   "optional_keys": [
+    "GROQ_API_KEY"
+   ],
+   "pip": [
+    [
+     "datasets",
+     "datasets"
+    ],
+    [
+     "groq",
+     "groq"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "matplotlib",
+     "matplotlib"
+    ],
+    [
+     "numpy",
+     "numpy"
+    ],
+    [
+     "pandas",
+     "pandas"
+    ],
+    [
+     "plotly",
+     "plotly"
+    ],
+    [
+     "pydantic",
+     "pydantic"
+    ],
+    [
+     "sklearn",
+     "scikit-learn"
+    ],
+    [
+     "torch",
+     "torch"
+    ],
+    [
+     "tqdm",
+     "tqdm"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week6/day2": {
   "lesson": "week6/day2.ipynb",
@@ -10732,7 +11417,28 @@ FILES['exercises.json'] = r'''{
    "1988b0e8d5abfe41ba9a659cdb4cef6c621acd3f",
    "242da414978b58583902ba1b812d35e425771559",
    "6e038e414ac5bb0d30088183ca009c52ec50cb28"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "GROQ_API_KEY",
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [],
+   "pip": [
+    [
+     "groq",
+     "groq"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ]
+   ],
+   "ollama": [
+    "llama3.2"
+   ],
+   "fork": false
+  }
  },
  "week6/day3": {
   "lesson": "week6/day3.ipynb",
@@ -10773,7 +11479,57 @@ FILES['exercises.json'] = r'''{
    "6a5cb35f7fc08f8350dc88890093731a9019e0b1",
    "aded4ba84d8998bcd2686b5d10dd47c1d0f6b851",
    "ed91b171b036c1b677c25187c271416b7272da4e"
-  ]
+  ],
+  "colab": {
+   "keys": [],
+   "optional_keys": [
+    "GROQ_API_KEY"
+   ],
+   "pip": [
+    [
+     "datasets",
+     "datasets"
+    ],
+    [
+     "groq",
+     "groq"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "numpy",
+     "numpy"
+    ],
+    [
+     "pandas",
+     "pandas"
+    ],
+    [
+     "plotly",
+     "plotly"
+    ],
+    [
+     "pydantic",
+     "pydantic"
+    ],
+    [
+     "sklearn",
+     "scikit-learn"
+    ],
+    [
+     "torch",
+     "torch"
+    ],
+    [
+     "tqdm",
+     "tqdm"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week6/day4": {
   "lesson": "week6/day4.ipynb",
@@ -10814,7 +11570,59 @@ FILES['exercises.json'] = r'''{
    "31fc6fc56b010d52d29e77ffdaca1dee6541863d",
    "70f9b52eabd851f2d200105ae001f8c82eb3432f",
    "8fc2e13fcaabf1699cf140f51b3d1a429dfc4645"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "GROQ_API_KEY"
+   ],
+   "pip": [
+    [
+     "datasets",
+     "datasets"
+    ],
+    [
+     "groq",
+     "groq"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "numpy",
+     "numpy"
+    ],
+    [
+     "pandas",
+     "pandas"
+    ],
+    [
+     "plotly",
+     "plotly"
+    ],
+    [
+     "pydantic",
+     "pydantic"
+    ],
+    [
+     "sklearn",
+     "scikit-learn"
+    ],
+    [
+     "torch",
+     "torch"
+    ],
+    [
+     "tqdm",
+     "tqdm"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week6/day5": {
   "lesson": "week6/day5.ipynb",
@@ -10855,7 +11663,59 @@ FILES['exercises.json'] = r'''{
    "42adfaf7f7c6fb291108e804064dcf220aaa0b7f",
    "48153ac524eec852942d300e3039159cc9b2b65f",
    "8e99c96d6cf2330080839feba4e824c45273858b"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "GROQ_API_KEY"
+   ],
+   "pip": [
+    [
+     "datasets",
+     "datasets"
+    ],
+    [
+     "groq",
+     "groq"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "numpy",
+     "numpy"
+    ],
+    [
+     "pandas",
+     "pandas"
+    ],
+    [
+     "plotly",
+     "plotly"
+    ],
+    [
+     "pydantic",
+     "pydantic"
+    ],
+    [
+     "sklearn",
+     "scikit-learn"
+    ],
+    [
+     "torch",
+     "torch"
+    ],
+    [
+     "tqdm",
+     "tqdm"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week7/day1": {
   "lesson": "week7/day1.ipynb",
@@ -10896,7 +11756,8 @@ FILES['exercises.json'] = r'''{
    "8aaa952a02f00142db355a62809ed41171e1b66b",
    "cecfa3444286b3c3cea265ec75492067a8cf2ea7",
    "ed8599f4e87fbcf7baf520906f5bc6bd10e8c203"
-  ]
+  ],
+  "colab": {}
  },
  "week7/day2": {
   "lesson": "week7/day2.ipynb",
@@ -10936,7 +11797,8 @@ FILES['exercises.json'] = r'''{
    "a11922c047f7e63b83a9b19116257b33c6f5d9df",
    "ec321e4f4f848b159df036485f65c61e9fa77dc9",
    "ee24f3a0456201dc1829f53edf9b7f05ea0936a7"
-  ]
+  ],
+  "colab": {}
  },
  "week7/day3_and_4": {
   "lesson": "week7/day3 and 4.ipynb",
@@ -10980,7 +11842,8 @@ FILES['exercises.json'] = r'''{
    "87b9d13576ce58966e8e06ede95035eaa658d3fa",
    "d02bb336ba6a431132a35b16a0eac85cef9f7bdc",
    "e69c732420290849606d6f3f305b68755a14505e"
-  ]
+  ],
+  "colab": {}
  },
  "week7/day5": {
   "lesson": "week7/day5.ipynb",
@@ -11018,7 +11881,8 @@ FILES['exercises.json'] = r'''{
    "6a5cb35f7fc08f8350dc88890093731a9019e0b1",
    "7bbce61406435ccdfc4c57c7cff02067b1b9f625",
    "dae2b50bf7d979c4d234f3b410f51520aaf525f9"
-  ]
+  ],
+  "colab": {}
  },
  "week8/day1": {
   "lesson": "week8/day1.ipynb",
@@ -11056,7 +11920,39 @@ FILES['exercises.json'] = r'''{
    "14e03575ba5ca2a445405ac04fc27112b9d75411",
    "37eb7539e9c60c76e2011380a9d21242359c33ab",
    "563ce2eb13ed69cb8d2ee4e7e0218a268508a0e1"
-  ]
+  ],
+  "colab": {
+   "keys": [],
+   "optional_keys": [
+    "HF_TOKEN",
+    "MODAL_TOKEN_ID",
+    "MODAL_TOKEN_SECRET"
+   ],
+   "pip": [
+    [
+     "modal",
+     "modal"
+    ],
+    [
+     "peft",
+     "peft"
+    ],
+    [
+     "requests",
+     "requests"
+    ],
+    [
+     "torch",
+     "torch"
+    ],
+    [
+     "transformers",
+     "transformers"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week8/day2": {
   "lesson": "week8/day2.ipynb",
@@ -11100,7 +11996,34 @@ FILES['exercises.json'] = r'''{
    "53ba79d7a25012c925825a38bf4d02c885b71ac3",
    "5da9fafebdf7ad1dfb7b2b9ff024bb43cbab051b",
    "9bf4eb6fb57fd3ac9f0053a51c2d293142dffd99"
-  ]
+  ],
+  "colab": {
+   "keys": [],
+   "optional_keys": [
+    "MODAL_TOKEN_ID",
+    "MODAL_TOKEN_SECRET"
+   ],
+   "pip": [
+    [
+     "chromadb",
+     "chromadb"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "modal",
+     "modal"
+    ],
+    [
+     "sentence_transformers",
+     "sentence-transformers"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week8/day3": {
   "lesson": "week8/day3.ipynb",
@@ -11143,7 +12066,76 @@ FILES['exercises.json'] = r'''{
    "7511d557d7d34d5cb7ba4b4494fe77e5d158cfcd",
    "98028c0342ce0b94d8a520d2e334bc370a5985b9",
    "ad09641d4ba765b5e3593c15cb1107dfe999a349"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "PUSHOVER_TOKEN",
+    "PUSHOVER_USER"
+   ],
+   "pip": [
+    [
+     "bs4",
+     "beautifulsoup4"
+    ],
+    [
+     "datasets",
+     "datasets"
+    ],
+    [
+     "feedparser",
+     "feedparser"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "modal",
+     "modal"
+    ],
+    [
+     "numpy",
+     "numpy"
+    ],
+    [
+     "pandas",
+     "pandas"
+    ],
+    [
+     "plotly",
+     "plotly"
+    ],
+    [
+     "pydantic",
+     "pydantic"
+    ],
+    [
+     "requests",
+     "requests"
+    ],
+    [
+     "sentence_transformers",
+     "sentence-transformers"
+    ],
+    [
+     "sklearn",
+     "scikit-learn"
+    ],
+    [
+     "torch",
+     "torch"
+    ],
+    [
+     "tqdm",
+     "tqdm"
+    ]
+   ],
+   "ollama": [],
+   "fork": true
+  }
  },
  "week8/day4": {
   "lesson": "week8/day4.ipynb",
@@ -11180,7 +12172,82 @@ FILES['exercises.json'] = r'''{
    "30d4adeb2a11adce6af8e906f2a0e5102095537b",
    "e3d9687586d66a8cc146aad9fe388b7ddbb5b4cf",
    "f102d779f24bd83458dc786ebf7035481e00bc5a"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "PUSHOVER_TOKEN",
+    "PUSHOVER_USER"
+   ],
+   "pip": [
+    [
+     "bs4",
+     "beautifulsoup4"
+    ],
+    [
+     "chromadb",
+     "chromadb"
+    ],
+    [
+     "datasets",
+     "datasets"
+    ],
+    [
+     "feedparser",
+     "feedparser"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "modal",
+     "modal"
+    ],
+    [
+     "numpy",
+     "numpy"
+    ],
+    [
+     "pandas",
+     "pandas"
+    ],
+    [
+     "plotly",
+     "plotly"
+    ],
+    [
+     "pydantic",
+     "pydantic"
+    ],
+    [
+     "requests",
+     "requests"
+    ],
+    [
+     "sentence_transformers",
+     "sentence-transformers"
+    ],
+    [
+     "sklearn",
+     "scikit-learn"
+    ],
+    [
+     "torch",
+     "torch"
+    ],
+    [
+     "tqdm",
+     "tqdm"
+    ]
+   ],
+   "ollama": [
+    "llama3.2"
+   ],
+   "fork": true
+  }
  },
  "week8/day5": {
   "lesson": "week8/day5.ipynb",
@@ -11221,7 +12288,86 @@ FILES['exercises.json'] = r'''{
   "replaces": [
    "81211be176189139b09d1857a4ec85b3444598b5",
    "fe4f1bdc5fef5a519c57a67eb191e34951e6d2df"
-  ]
+  ],
+  "colab": {
+   "keys": [
+    "OPENAI_API_KEY"
+   ],
+   "optional_keys": [
+    "PUSHOVER_TOKEN",
+    "PUSHOVER_USER"
+   ],
+   "pip": [
+    [
+     "bs4",
+     "beautifulsoup4"
+    ],
+    [
+     "chromadb",
+     "chromadb"
+    ],
+    [
+     "datasets",
+     "datasets"
+    ],
+    [
+     "feedparser",
+     "feedparser"
+    ],
+    [
+     "gradio",
+     "gradio"
+    ],
+    [
+     "litellm",
+     "litellm"
+    ],
+    [
+     "modal",
+     "modal"
+    ],
+    [
+     "numpy",
+     "numpy"
+    ],
+    [
+     "pandas",
+     "pandas"
+    ],
+    [
+     "plotly",
+     "plotly"
+    ],
+    [
+     "pydantic",
+     "pydantic"
+    ],
+    [
+     "requests",
+     "requests"
+    ],
+    [
+     "sentence_transformers",
+     "sentence-transformers"
+    ],
+    [
+     "sklearn",
+     "scikit-learn"
+    ],
+    [
+     "torch",
+     "torch"
+    ],
+    [
+     "tqdm",
+     "tqdm"
+    ]
+   ],
+   "ollama": [
+    "llama3.2"
+   ],
+   "fork": true
+  }
  }
 }'''
 
