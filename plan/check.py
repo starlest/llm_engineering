@@ -1366,12 +1366,13 @@ def in_colab():
 
 
 def load_keys(names):
-    """Copy these secrets from Colab into os.environ. Returns the names loaded, missing, and refused."""
-    loaded, missing, refused = [], [], []
+    """Copy these secrets from Colab into os.environ. Returns the names loaded, missing, refused, and unanswered (Colab
+    gives you 10 seconds to answer its grant-access question)."""
+    loaded, missing, refused, unanswered = [], [], [], []
     try:
         from google.colab import userdata
     except ImportError:
-        return loaded, list(names), refused
+        return loaded, list(names), refused, unanswered
     for name in names:
         if os.environ.get(name, "").strip():
             loaded.append(name)  # already here, from an earlier run of the first cell
@@ -1381,8 +1382,8 @@ def load_keys(names):
         except userdata.NotebookAccessError:
             refused.append(name)
             continue
-        except Exception:  # noqa: BLE001 - not in your secrets, or Colab did not answer
-            missing.append(name)
+        except Exception as e:  # noqa: BLE001 - not in your secrets, or no answer in time
+            (unanswered if "Timeout" in type(e).__name__ else missing).append(name)
             continue
         value = (value or "").strip()
         if value:
@@ -1390,7 +1391,7 @@ def load_keys(names):
             loaded.append(name)
         else:
             missing.append(name)
-    return loaded, missing, refused
+    return loaded, missing, refused, unanswered
 
 
 def get_fork(root):
@@ -1491,7 +1492,7 @@ def prepare(key, names, needs):
     lines = []
     required, optional = list(needs.get("keys", [])), list(needs.get("optional_keys", []))
     if required or optional:
-        loaded, missing, refused = load_keys(required + optional)
+        loaded, missing, refused, unanswered = load_keys(required + optional)
         if loaded:
             lines.append("Keys from your Colab secrets: " + ", ".join(loaded) + ".")
         need = [n for n in missing if n in required]
@@ -1504,6 +1505,9 @@ def prepare(key, names, needs):
         if refused:
             lines.append("This notebook may not read " + ", ".join(refused) + ": in the key panel on the left, turn on "
                          "Notebook access for it, then run this cell again.")
+        if unanswered:
+            lines.append("Colab did not hand over " + ", ".join(unanswered) + " in time. If it asked you to grant "
+                         "access, run this cell again.")
     if needs.get("fork"):
         root = pathlib.Path(names.get("ROOT") or "/content/fork")
         problem = get_fork(root)
